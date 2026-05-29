@@ -118,8 +118,8 @@ algorithm: 'leaky-bucket'    // 漏桶（平滑流量）
 | **leaky-bucket** | ⭐⭐⭐⭐ | 低 | 流量整形、保护后端 | ⭐⭐⭐⭐ | [👉 详细说明](#4-leaky-bucket漏桶---平滑流量) |
 
 💡 **算法对比文档**：
-- 📖 [算法对比指南](./algorithms-comparison.md) - 选择决策、配置示例、实战推荐
-- 📖 [算法深度分析](./algorithms-deep-analysis.md) - 实现原理、瞬时超频分析、源码解读
+- 📖 [算法对比指南](../algorithms/comparison.md) - 选择决策、配置示例、实战推荐
+- 📖 [算法深度分析](../algorithms/deep-analysis.md) - 实现原理、瞬时超频分析、源码解读
 
 #### 算法详解
 
@@ -253,8 +253,8 @@ algorithm: 'leaky-bucket'    // 漏桶（平滑流量）
 **适用**：保护后端系统、需要恒定输出速率的场景
 
 📖 **详细文档**：
-- [算法对比指南](./algorithms-comparison.md) - 使用场景、配置示例、选择决策
-- [算法深度分析](./algorithms-deep-analysis.md) - 实现原理、瞬时超频分析
+- [算法对比指南](../algorithms/comparison.md) - 使用场景、配置示例、选择决策
+- [算法深度分析](../algorithms/deep-analysis.md) - 实现原理、瞬时超频分析
 
 ---
 
@@ -292,10 +292,12 @@ store: new RedisStore({
 **说明**：生成唯一的限流键，决定"按什么维度限流"
 
 ```javascript
-// 预定义生成器（字符串）
-keyGenerator: 'ip'            // 按IP限流
-keyGenerator: 'userId'        // 按用户ID限流
-keyGenerator: 'userAndRoute'  // 按用户+路由限流（业务锁）⭐
+const { keyGenerators } = require('flex-rate-limit');
+
+// 预定义生成器（函数引用）
+keyGenerator: keyGenerators.ip            // 按IP限流
+keyGenerator: keyGenerators.userId        // 按用户ID限流
+keyGenerator: keyGenerators.userAndRoute  // 按用户+路由限流（业务锁）⭐
 
 // 自定义函数
 keyGenerator: (req, context) => {
@@ -353,7 +355,7 @@ const limiter = new RateLimiter({
 ## 完整配置示例
 
 ```javascript
-const { RateLimiter } = require('flex-rate-limit');
+const { RateLimiter, keyGenerators } = require('flex-rate-limit');
 
 const limiter = new RateLimiter({
   // 核心配置
@@ -386,7 +388,7 @@ const limiter = new RateLimiter({
 | max | number \| function | 100 | 最大请求数或动态函数 |
 | algorithm | string | 'sliding-window' | 限流算法 |
 | store | string \| object | 'memory' | 存储后端 |
-| keyGenerator | string \| function | 按IP | 键生成器 |
+| keyGenerator | function | 默认按 IP | 键生成器 |
 | skip | function | () => false | 跳过检查的条件 |
 | perRoute | object | {} | 路由级别配置 |
 | handler | function | null | 自定义处理器 |
@@ -404,7 +406,7 @@ const limiter = new RateLimiter({
 const loginLimiter = new RateLimiter({
   windowMs: 15 * 60 * 1000,  // 15分钟
   max: 5,                     // ⭐ 最多5次（防暴力破解）
-  keyGenerator: 'ip',         // 按IP限制
+  keyGenerator: keyGenerators.ip,         // 按IP限制
   handler: (req, res) => {
     res.status(429).json({
       error: '登录尝试过多，请15分钟后再试',
@@ -419,7 +421,7 @@ const loginLimiter = new RateLimiter({
 const sensitiveOpLimiter = new RateLimiter({
   windowMs: 60 * 60 * 1000,   // 1小时
   max: 10,                     // ⭐ 最多10次（修改密码、支付等）
-  keyGenerator: 'userId',      // 按用户限制
+  keyGenerator: keyGenerators.userId,      // 按用户限制
 });
 ```
 
@@ -429,7 +431,7 @@ const sensitiveOpLimiter = new RateLimiter({
 const mutationLimiter = new RateLimiter({
   windowMs: 60 * 60 * 1000,   // 1小时
   max: 50,                     // ⭐ 最多50次（创建、更新、删除）
-  keyGenerator: 'userAndRoute', // 按用户+路由限制（业务锁）
+  keyGenerator: keyGenerators.userAndRoute, // 按用户+路由限制（业务锁）
 });
 ```
 
@@ -439,7 +441,7 @@ const mutationLimiter = new RateLimiter({
 const queryLimiter = new RateLimiter({
   windowMs: 60 * 1000,        // 1分钟
   max: 100,                    // ⭐ 最多100次（列表、详情查询）
-  keyGenerator: 'userAndRoute',
+  keyGenerator: keyGenerators.userAndRoute,
 });
 ```
 
@@ -467,7 +469,7 @@ const tieredLimiter = new RateLimiter({
       enterprise: 10000,// ⭐ 企业用户
     }[tier];
   },
-  keyGenerator: 'userId',
+  keyGenerator: keyGenerators.userId,
 });
 ```
 
@@ -534,20 +536,13 @@ const limiter = new RateLimiter({
 
 **下一步阅读**：
 - 📖 [高级用法](advanced.md) - 路由级限流、动态配置
-- 📖 [算法对比指南](./algorithms-comparison.md) - 深入理解算法选择
+- 📖 [算法对比指南](../algorithms/comparison.md) - 深入理解算法选择
 
 **相关主题**：
 - 📖 [业务锁指南](business-lock-guide.md) - keyGenerator详解
 - 📖 [存储后端](storage.md) - Redis配置和性能对比
-- 📖 [快速开始](./quickstart.md) - 基础用法
+- 📖 [快速开始](../getting-started/quickstart.md) - 基础用法
 
 **返回**：
-- 📖 [文档中心](./README.md) - 查看所有文档和学习路径
-  }),
-});
-```
-
-
-
-
+- 📖 [文档中心](../README.md) - 查看所有文档和学习路径
 

@@ -8,21 +8,8 @@
     - [check(key, options)](#checkkey-options)
     - [middleware()](#middleware)
     - [reset(key)](#resetkey)
-- [配置选项](#配置选项)
-  - [windowMs](#windowms)
-  - [max](#max)
-  - [algorithm](#algorithm)
-  - [store](#store)
-  - [keyGenerator](#keygenerator)
-  - [skip](#skip)
-  - [handler](#handler)
-  - [headers](#headers)
-  - [perRoute](#perroute)
-- [Store 接口](#store-接口)
-  - [get(key)](#getkey)
-  - [set(key, value, ttl)](#setkey-value-ttl)
-  - [increment(key, options)](#incrementkey-options)
-  - [reset(key)](#resetkey-1)
+- [配置选项速查](#配置选项速查)
+- [Store 接口速查](#store-接口速查)
 - [预定义键生成器](#预定义键生成器)
 - [响应头](#响应头)
 
@@ -86,6 +73,40 @@ await limiter.reset('user-123');
 await limiter.resetAll();
 ```
 
+## 配置选项速查
+
+| 选项 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `windowMs` | `number` | `60000` | 时间窗口大小，单位毫秒 |
+| `max` | `number \| function` | `100` | 最大请求数，支持按请求动态计算 |
+| `algorithm` | `'sliding-window' \| 'fixed-window' \| 'token-bucket' \| 'leaky-bucket'` | `'sliding-window'` | 限流算法 |
+| `store` | `Store \| 'memory'` | `'memory'` | 存储后端；Redis 需传入 `new RedisStore({ client })` |
+| `keyGenerator` | `function` | 按 IP | 生成限流键；预定义生成器通过 `keyGenerators.*` 传入 |
+| `skip` | `function` | `() => false` | 返回 `true` 时跳过限流 |
+| `handler` | `function \| null` | `null` | 超限后的自定义响应处理器 |
+| `headers` | `boolean` | `true` | 是否写入 `X-RateLimit-*` 响应头 |
+| `perRoute` | `object \| null` | `null` | 按路由覆盖全局配置 |
+| `skipSuccessfulRequests` | `boolean` | `false` | 成功响应完成后回滚本次计数 |
+| `skipFailedRequests` | `boolean` | `false` | 失败响应完成后回滚本次计数 |
+| `capacity` | `number` | 同 `max` | 令牌桶/漏桶容量 |
+| `refillRate` | `number` | 同 `capacity` | 令牌桶在每个 `windowMs` 内补充的令牌数 |
+| `leakRate` | `number` | 同 `capacity` | 漏桶在每个 `windowMs` 内漏出的请求数 |
+
+## Store 接口速查
+
+自定义 Store 至少需要实现 `increment`、`get`、`set` 和 `reset`；`decrement` 用于固定窗口回滚，`resetAll` 用于全量清理。
+
+```typescript
+interface Store {
+  get(key: string): Promise<any>;
+  set(key: string, value: any, ttl?: number): Promise<void>;
+  increment(key: string, options?: any): Promise<{ count: number; resetTime?: number }>;
+  decrement?(key: string): Promise<void>;
+  reset(key: string): Promise<void>;
+  resetAll?(): Promise<void>;
+}
+```
+
 ## 响应头
 
 当设置 `headers: true` 时，会添加以下响应头：
@@ -102,7 +123,7 @@ await limiter.resetAll();
 主类，用于创建限流器实例。
 
 ```javascript
-const { RateLimiter } = require('rate-limit');
+const { RateLimiter } = require('flex-rate-limit');
 ```
 
 ### RedisStore
@@ -110,7 +131,7 @@ const { RateLimiter } = require('rate-limit');
 Redis 存储后端。
 
 ```javascript
-const { RedisStore } = require('rate-limit');
+const { RedisStore } = require('flex-rate-limit');
 ```
 
 ### MemoryStore
@@ -118,7 +139,7 @@ const { RedisStore } = require('rate-limit');
 内存存储后端（通常不需要直接使用）。
 
 ```javascript
-const { MemoryStore } = require('rate-limit');
+const { MemoryStore } = require('flex-rate-limit');
 ```
 
 ### keyGenerators
@@ -126,7 +147,7 @@ const { MemoryStore } = require('rate-limit');
 预定义的键生成器对象。
 
 ```javascript
-const { keyGenerators } = require('rate-limit');
+const { keyGenerators } = require('flex-rate-limit');
 
 // 可用的生成器：
 // - keyGenerators.ip
@@ -163,7 +184,7 @@ try {
 ### 基本使用
 
 ```javascript
-const { RateLimiter } = require('rate-limit');
+const { RateLimiter } = require('flex-rate-limit');
 
 const limiter = new RateLimiter({
   windowMs: 60000,
@@ -182,7 +203,7 @@ if (result.allowed) {
 
 ```javascript
 const express = require('express');
-const { RateLimiter } = require('rate-limit');
+const { RateLimiter } = require('flex-rate-limit');
 
 const app = express();
 const limiter = new RateLimiter({
@@ -202,7 +223,7 @@ app.get('/api/data', limiter.middleware(), (req, res) => {
 ### Redis 使用
 
 ```javascript
-const { RateLimiter, RedisStore } = require('rate-limit');
+const { RateLimiter, RedisStore } = require('flex-rate-limit');
 const Redis = require('ioredis');
 
 const redis = new Redis('redis://localhost:6379');
@@ -250,7 +271,6 @@ const limiter = new RateLimiter({
   handler: (req, res) => {
     res.status(429).json({
       error: '请求过于频繁',
-      retryAfter: Math.ceil(req.rateLimit.resetTime / 1000),
     });
   },
 });

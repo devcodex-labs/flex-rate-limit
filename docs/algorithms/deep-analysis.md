@@ -1159,13 +1159,13 @@ const limiter = new RateLimiter({
 ## 📚 相关文档
 
 **快速指南**：
-- 📖 [算法对比指南](./algorithms-comparison.md) - 选择决策、使用场景、配置示例
+- 📖 [算法对比指南](comparison.md) - 选择决策、使用场景、配置示例
 
 **应用配置**：
-- 📖 [配置详解](./config.md) - algorithm配置和实战场景
+- 📖 [配置详解](../guides/config.md) - algorithm配置和实战场景
 
 **返回**：
-- 📖 [文档中心](./README.md) - 查看所有文档和学习路径
+- 📖 [文档中心](../README.md) - 查看所有文档和学习路径
 
 ---
 

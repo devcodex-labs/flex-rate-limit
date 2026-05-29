@@ -35,8 +35,8 @@ async function simulateRequests() {
 
     console.log('');
 
-    // 请求之间等待 500ms
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    // 短暂停顿，便于观察输出，同时保持示例验证脚本可快速完成。
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
 
   // 重置速率限制
@@ -65,7 +65,7 @@ async function demonstrateAlgorithms() {
     for (let i = 1; i <= 5; i++) {
       const result = await limiter.check(`test-${algo}`);
       console.log(`请求 ${i}: ${result.allowed ? '✅' : '⛔'} (${result.current}/${result.limit})`);
-      await new Promise((resolve) => setTimeout(resolve, 200));
+      await new Promise((resolve) => setTimeout(resolve, 50));
     }
   }
 }

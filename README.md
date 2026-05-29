@@ -92,11 +92,6 @@ app.listen(3000);
 
 👉 **[📚 完整文档导航](docs/README.md)** - 查看所有文档、学习路径、场景查找
 
-### 项目复审
-
-- 🧾 [Project Review (English)](REVIEW.md) - 当前实现与修复状态的默认审查文档
-- 🇨🇳 [项目复审（中文）](docs/review.zh-CN.md) - 英文 review 的中文译文与本地化说明
-
 ### 快速入口
 
 | 文档 | 说明 | 难度 |
@@ -144,7 +139,7 @@ const limiter = new RateLimiter({
 - ✅ 公司网络/校园网用户互不影响
 - ✅ 精确控制每个用户的行为
 
-详见：[业务锁完整指南](docs/business-lock-guide.md)
+详见：[业务锁完整指南](docs/guides/business-lock-guide.md)
 
 ### IP 白名单与访问控制 ⭐⭐
 

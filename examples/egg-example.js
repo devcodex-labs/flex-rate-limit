@@ -84,15 +84,12 @@ config.rateLimit = {
   algorithm: 'sliding-window',
 };
 
-// config/plugin.js
-exports.rateLimit = {
-  enable: true,
-  package: 'rate-limit',
-};
+// config/config.default.js
+config.middleware = ['rateLimit'];
 
 // app.js 或 app/middleware/rate_limit.js
 module.exports = app => {
-  const rateLimitMiddleware = require('rate-limit/examples/egg-example');
+  const rateLimitMiddleware = require('./app/middleware/rate-limit');
 
   app.middleware.rateLimit = rateLimitMiddleware(app.config.rateLimit);
 
@@ -125,13 +122,13 @@ module.exports = app => {
   const { router, controller } = app;
 
   // 严格限制的登录接口
-  const strictRateLimit = require('rate-limit/examples/egg-example')({
+  const strictRateLimit = require('./middleware/rate-limit')({
     windowMs: 15 * 60 * 1000,
     max: 5,
   });
 
   // 普通接口
-  const normalRateLimit = require('rate-limit/examples/egg-example')({
+  const normalRateLimit = require('./middleware/rate-limit')({
     windowMs: 60 * 1000,
     max: 100,
   });

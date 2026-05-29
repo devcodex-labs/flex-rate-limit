@@ -59,7 +59,7 @@ const limiter = new RateLimiter({
 ### 方式 2: 使用 ioredis 客户端
 
 ```javascript
-const { RateLimiter, RedisStore } = require('rate-limit');
+const { RateLimiter, RedisStore } = require('flex-rate-limit');
 const Redis = require('ioredis');
 
 const redis = new Redis({
@@ -86,7 +86,7 @@ const limiter = new RateLimiter({
 
 ```javascript
 const Redis = require('ioredis');
-const { RedisStore } = require('rate-limit');
+const { RedisStore } = require('flex-rate-limit');
 
 const cluster = new Redis.Cluster([
   { host: 'node1', port: 6379 },
@@ -103,7 +103,7 @@ const limiter = new RateLimiter({
 
 ```javascript
 const Redis = require('ioredis');
-const { RedisStore } = require('rate-limit');
+const { RedisStore } = require('flex-rate-limit');
 
 const sentinel = new Redis({
   sentinels: [
@@ -358,13 +358,13 @@ const limiter = new RateLimiter({
 - 📖 [高级用法](advanced.md) - 自定义存储后端实现
 
 **性能优化**：
-- 📖 [算法深度分析](./algorithms-deep-analysis.md) - 性能对比数据和优化建议
+- 📖 [算法深度分析](../algorithms/deep-analysis.md) - 性能对比数据和优化建议
 
 **基础知识**：
-- 📖 [快速开始](./quickstart.md) - 基本用法
+- 📖 [快速开始](../getting-started/quickstart.md) - 基本用法
 
 **返回**：
-- 📖 [文档中心](./README.md) - 查看所有文档和学习路径
+- 📖 [文档中心](../README.md) - 查看所有文档和学习路径
 
 
 

@@ -729,10 +729,10 @@ async checkLimitStatus(ctx) {
 - 📖 [高级用法](advanced.md) - 自定义键生成器详解
 
 **基础知识**：
-- 📖 [快速开始](./quickstart.md) - 基本用法和快速集成
+- 📖 [快速开始](../getting-started/quickstart.md) - 基本用法和快速集成
 
 **返回**：
-- 📖 [文档中心](./README.md) - 查看所有文档和学习路径
+- 📖 [文档中心](../README.md) - 查看所有文档和学习路径
 
 ---
 

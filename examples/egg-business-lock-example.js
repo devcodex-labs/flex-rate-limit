@@ -295,19 +295,19 @@ module.exports = (app) => {
   const businessLock = require('./middleware/business-lock')(app);
 
   // 方案一：预定义
-  const preDefinedLimit = require('rate-limit/examples/egg-business-lock-example').preDefinedLimiter({
+  const preDefinedLimit = require('./middleware/business-lock').preDefinedLimiter({
     windowMs: 60 * 1000,
     max: 100,
   });
 
   // 方案二：自定义
-  const customLimit = require('rate-limit/examples/egg-business-lock-example').customBusinessLock({
+  const customLimit = require('./middleware/business-lock').customBusinessLock({
     windowMs: 60 * 1000,
     max: 50,
   });
 
   // 方案三：路由级业务锁（推荐）
-  const limit = require('rate-limit/examples/egg-business-lock-example').createBusinessLimiters(app);
+  const limit = require('./middleware/business-lock').createBusinessLimiters(app);
 
   // 登录：每个用户15分钟最多5次
   router.post('/api/login', limit.strict, controller.auth.login);
@@ -338,7 +338,7 @@ module.exports = (app) => {
 // ========== app/middleware/business-lock.js ==========
 
 module.exports = (app) => {
-  return require('rate-limit/examples/egg-business-lock-example').createBusinessLimiters(app);
+  return require('./business-lock').createBusinessLimiters(app);
 };
 
 // ========== config/config.default.js ==========

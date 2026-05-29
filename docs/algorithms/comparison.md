@@ -526,23 +526,23 @@ const limiter = new RateLimiter({
 
 ## 10. 相关文档
 
-- 📖 [算法深度分析](./algorithms-deep-analysis.md) - 详细的算法实现原理和瞬时超频分析
-- 📖 [配置详解](./config.md) - 完整的配置选项说明
-- 📖 [快速开始](./quickstart.md) - 所有框架的完整示例
+- 📖 [算法深度分析](deep-analysis.md) - 详细的算法实现原理和瞬时超频分析
+- 📖 [配置详解](../guides/config.md) - 完整的配置选项说明
+- 📖 [快速开始](../getting-started/quickstart.md) - 所有框架的完整示例
 
 ---
 
 ## 📚 相关文档
 
 **深入分析**：
-- 📖 [算法深度分析](./algorithms-deep-analysis.md) - 源码级分析、瞬时超频计算
+- 📖 [算法深度分析](deep-analysis.md) - 源码级分析、瞬时超频计算
 
 **应用配置**：
-- 📖 [配置详解](./config.md) - algorithm配置说明
-- 📖 [高级用法](./advanced.md) - 实际应用场景
+- 📖 [配置详解](../guides/config.md) - algorithm配置说明
+- 📖 [高级用法](../guides/advanced.md) - 实际应用场景
 
 **返回**：
-- 📖 [文档中心](./README.md) - 查看所有文档和学习路径
+- 📖 [文档中心](../README.md) - 查看所有文档和学习路径
 
 ---
 

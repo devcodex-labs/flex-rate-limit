@@ -328,7 +328,7 @@ app.get('/api/secure/query',
 ### Express 独立版本
 
 ```bash
-cd E:\MySelf\rate-limit
+cd E:\MySelf\flex-rate-limit
 
 # 启动服务（端口 3500）
 GLOBAL_IP_WHITELIST=127.0.0.1 \

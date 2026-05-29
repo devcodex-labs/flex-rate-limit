@@ -83,7 +83,7 @@ app.use(limiter.middleware());
 **文件**: `app/middleware/rate-limit.js`
 
 ```javascript
-const { RateLimiter } = require('rate-limit');
+const { RateLimiter } = require('flex-rate-limit');
 
 module.exports = (app) => {
   return {
@@ -212,7 +212,7 @@ module.exports = (app) => {
 
 **情况1：按IP限制**
 ```javascript
-keyGenerator: 'ip'  // Key: 192.168.1.1
+keyGenerator: keyGenerators.ip  // Key: 192.168.1.1
 
 // 配置：1分钟100次
 // 实际效果：
@@ -223,7 +223,7 @@ keyGenerator: 'ip'  // Key: 192.168.1.1
 
 **情况2：按用户限制**
 ```javascript
-keyGenerator: 'userId'  // Key: user:1, user:2, user:3, ...
+keyGenerator: keyGenerators.userId  // Key: user:1, user:2, user:3, ...
 
 // 配置：1分钟100次
 // 实际效果：
@@ -234,7 +234,7 @@ keyGenerator: 'userId'  // Key: user:1, user:2, user:3, ...
 
 **情况3：按用户+路由限制（业务锁）**
 ```javascript
-keyGenerator: 'userAndRoute'  
+keyGenerator: keyGenerators.userAndRoute
 // Key: user:1:/api/login, user:1:/api/data, user:2:/api/login, ...
 
 // 配置：1分钟100次
@@ -250,38 +250,38 @@ keyGenerator: 'userAndRoute'
 ### 预定义键生成器详解
 
 ```javascript
-const { RateLimiter } = require('flex-rate-limit');
+const { RateLimiter, keyGenerators } = require('flex-rate-limit');
 
 // 1. 按 IP 限制（默认）
 const limiter1 = new RateLimiter({
-  keyGenerator: 'ip',  // 生成Key: 192.168.1.1
+  keyGenerator: keyGenerators.ip,  // 生成Key: 192.168.1.1
 });
 // ✅ 适用：公开API，无需登录
 // ❌ 问题：同一IP的所有用户共享限额
 
 // 2. 按用户 ID 限制
 const limiter2 = new RateLimiter({
-  keyGenerator: 'userId',  // 生成Key: user:123
+  keyGenerator: keyGenerators.userId,  // 生成Key: user:123
 });
 // ✅ 适用：需要登录的API
 // ⚠️ 注意：未登录用户会回退到IP限制
 
 // 3. 按路由+IP 限制
 const limiter3 = new RateLimiter({
-  keyGenerator: 'routeAndIp',  // 生成Key: 192.168.1.1:/api/login
+  keyGenerator: keyGenerators.routeAndIp,  // 生成Key: 192.168.1.1:/api/login
 });
 // ✅ 适用：不同接口需要不同限制
 // ❌ 问题：同一IP的用户仍然共享
 
 // 4. 按API端点限制
 const limiter4 = new RateLimiter({
-  keyGenerator: 'apiEndpoint',  // 生成Key: /api/v1/data:192.168.1.1
+  keyGenerator: keyGenerators.apiEndpoint,  // 生成Key: /api/v1/data:192.168.1.1
 });
 // ✅ 适用：RESTful API，按端点独立限制
 
 // 5. 按用户+路由限制（业务锁，推荐）⭐
 const limiter5 = new RateLimiter({
-  keyGenerator: 'userAndRoute',  // 生成Key: user:123:/api/login
+  keyGenerator: keyGenerators.userAndRoute,  // 生成Key: user:123:/api/login
 });
 // ✅ 适用：业务系统（推荐）
 // ✅ 优势：最精细的控制，完全隔离
@@ -466,10 +466,10 @@ await limiter.resetAll();
 
 **基础知识**：
 - 📖 [配置详解](config.md) - 配置选项详细说明
-- 📖 [快速开始](./quickstart.md) - 基础用法和快速集成
+- 📖 [快速开始](../getting-started/quickstart.md) - 基础用法和快速集成
 
 **返回**：
-- 📖 [文档中心](./README.md) - 查看所有文档和学习路径
+- 📖 [文档中心](../README.md) - 查看所有文档和学习路径
 
 
 

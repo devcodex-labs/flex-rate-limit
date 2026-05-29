@@ -223,7 +223,9 @@ export interface RedisStoreOptions {
  * 限流算法接口
  */
 export interface Algorithm {
-  check(store: Store, key: string, options: any): Promise<{ count: number; resetTime: number }>;
+  check(store: Store, key: string, options: any): Promise<RateLimitResult & { rollbackData?: any }>;
+  rollback?(store: Store, key: string, options: any, result: RateLimitResult): Promise<void>;
+  reset?(store: Store, key: string, options: any): Promise<void>;
 }
 
 /**

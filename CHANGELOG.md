@@ -5,6 +5,14 @@
 格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [Unreleased]
+
+### 变更
+- 移除一次性 review 文档，审查结论改由 DevCodex 报告归档。
+- 修正文档链接、包名、`keyGenerator` 示例和 API 参考，使公开文档与当前实现一致。
+- 对齐 TypeScript `Algorithm` 类型与算法实现返回契约。
+- 缩短独立示例运行等待时间，确保示例验证脚本可稳定完成。
+
 ## [1.0.0] - 2026-02-04
 
 ### 新增

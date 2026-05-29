@@ -191,7 +191,7 @@ init();
 
 // 使用 Redis 存储的示例
 const Redis = require('ioredis');
-const { RedisStore } = require('rate-limit');
+const { RedisStore } = require('../lib');
 
 const initWithRedis = async () => {
   const server = Hapi.server({

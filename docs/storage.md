@@ -59,7 +59,7 @@ const limiter = new RateLimiter({
 ### 方式 2: 使用 ioredis 客户端
 
 ```javascript
-const { RateLimiter, RedisStore } = require('rate-limit');
+const { RateLimiter, RedisStore } = require('flex-rate-limit');
 const Redis = require('ioredis');
 
 const redis = new Redis({
@@ -86,7 +86,7 @@ const limiter = new RateLimiter({
 
 ```javascript
 const Redis = require('ioredis');
-const { RedisStore } = require('rate-limit');
+const { RedisStore } = require('flex-rate-limit');
 
 const cluster = new Redis.Cluster([
   { host: 'node1', port: 6379 },
@@ -103,7 +103,7 @@ const limiter = new RateLimiter({
 
 ```javascript
 const Redis = require('ioredis');
-const { RedisStore } = require('rate-limit');
+const { RedisStore } = require('flex-rate-limit');
 
 const sentinel = new Redis({
   sentinels: [

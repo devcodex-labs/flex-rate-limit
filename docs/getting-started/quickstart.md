@@ -18,11 +18,11 @@
 
 | 框架 | 快速开始文件 | 说明 |
 |------|------------|------|
-| **Express** | [quickstart-express.js](../examples/quickstart-express.js) | 完整的Express路由级限流示例 |
-| **Koa** | [quickstart-koa.js](../examples/quickstart-koa.js) | 完整的Koa路由级限流示例 |
-| **Egg.js** | [quickstart-egg.js](../examples/quickstart-egg.js) | 完整的Egg.js路由级限流示例 |
-| **Hapi** | [quickstart-hapi.js](../examples/quickstart-hapi.js) | 完整的Hapi路由级限流示例 |
-| **独立使用** | [standalone-example.js](../examples/standalone-example.js) | 无框架情况下的使用 |
+| **Express** | [quickstart-express.js](../../examples/quickstart-express.js) | 完整的Express路由级限流示例 |
+| **Koa** | [quickstart-koa.js](../../examples/quickstart-koa.js) | 完整的Koa路由级限流示例 |
+| **Egg.js** | [quickstart-egg.js](../../examples/quickstart-egg.js) | 完整的Egg.js路由级限流示例 |
+| **Hapi** | [quickstart-hapi.js](../../examples/quickstart-hapi.js) | 完整的Hapi路由级限流示例 |
+| **独立使用** | [standalone-example.js](../../examples/standalone-example.js) | 无框架情况下的使用 |
 
 ## ⚡ 快速示例
 
@@ -231,25 +231,25 @@ node examples/quickstart-hapi.js
 
 ## 📚 深入了解
 
-- 更多配置选项，查看 [配置详解](./config.md)
-- 高级用法，查看 [高级用法](./advanced.md)
-- 限流算法，查看 [算法对比指南](./algorithms-comparison.md)
+- 更多配置选项，查看 [配置详解](../guides/config.md)
+- 高级用法，查看 [高级用法](../guides/advanced.md)
+- 限流算法，查看 [算法对比指南](../algorithms/comparison.md)
 
 ---
 
 ## 📚 相关文档
 
 **下一步阅读**：
-- 📖 [配置详解](./config.md) - 了解所有配置选项和推荐配置
-- 📖 [高级用法](./advanced.md) - 学习路由级限流和动态配置
+- 📖 [配置详解](../guides/config.md) - 了解所有配置选项和推荐配置
+- 📖 [高级用法](../guides/advanced.md) - 学习路由级限流和动态配置
 
 **相关主题**：
-- 📖 [业务锁指南](./business-lock-guide.md) - 按用户+路由的精细化限流
-- 📖 [算法对比指南](./algorithms-comparison.md) - 选择合适的限流算法
-- 📖 [存储后端](./storage.md) - Memory vs Redis选择
+- 📖 [业务锁指南](../guides/business-lock-guide.md) - 按用户+路由的精细化限流
+- 📖 [算法对比指南](../algorithms/comparison.md) - 选择合适的限流算法
+- 📖 [存储后端](../guides/storage.md) - Memory vs Redis选择
 
 **返回**：
-- 📖 [文档中心](./README.md) - 查看所有文档和学习路径
+- 📖 [文档中心](../README.md) - 查看所有文档和学习路径
 
 
 

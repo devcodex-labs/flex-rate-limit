@@ -8,18 +8,6 @@
 
 ---
 
-## 🧾 项目复审
-
-- 默认英文 review：[`../REVIEW.md`](../REVIEW.md)
-- 中文译文：[`review.zh-CN.md`](review.zh-CN.md)
-
-这两份文档用于说明 2026-05-29 的“审查结论与实现状态是否一致”复核结果：
-
-- 英文版作为默认 review 文档，面向仓库读者与外部协作者
-- 中文版作为对照译文，补充本地语境说明
-
----
-
 ## 🎯 快速导航
 
 ### 🚀 新手入门（5-10分钟）
@@ -371,19 +359,19 @@ whitelist-ratelimit-config-scenarios.md → whitelist-ratelimit-independence.md
 ### 常见问题
 
 **Q: 我应该从哪个文档开始？**
-A: 从 [quickstart.md](quickstart.md) 开始，5分钟就能上手。
+A: 从 [getting-started/quickstart.md](getting-started/quickstart.md) 开始，5分钟就能上手。
 
 **Q: 我如何选择算法？**
-A: 查看 [algorithms-comparison.md](algorithms-comparison.md) 的选择决策树。
+A: 查看 [algorithms/comparison.md](algorithms/comparison.md) 的选择决策树。
 
 **Q: 登录接口应该怎么配置？**
-A: 推荐 `strict` 级别：15分钟5次，参考 [quickstart.md](quickstart.md)。
+A: 推荐 `strict` 级别：15分钟5次，参考 [getting-started/quickstart.md](getting-started/quickstart.md)。
 
 **Q: Memory 和 Redis 如何选择？**
-A: 单服务器用Memory，多服务器用Redis，详见 [storage.md](storage.md)。
+A: 单服务器用Memory，多服务器用Redis，详见 [guides/storage.md](guides/storage.md)。
 
 **Q: 什么是业务锁？**
-A: 按用户+路由限流，每个用户在每个接口独立限额，详见 [business-lock-guide.md](business-lock-guide.md)。
+A: 按用户+路由限流，每个用户在每个接口独立限额，详见 [guides/business-lock-guide.md](guides/business-lock-guide.md)。
 
 ---
 
@@ -400,8 +388,6 @@ A: 按用户+路由限流，每个用户在每个接口独立限额，详见 [bu
 - 📖 [项目首页](../README.md)
 - 💻 [示例代码](../examples/)
 - 📦 [npm 包](https://www.npmjs.com/package/flex-rate-limit)
-- 🧾 [英文 Review](../REVIEW.md)
-- 🇨🇳 [中文 Review](review.zh-CN.md)
 - 🐛 [报告问题](https://github.com/vextjs/flex-rate-limit/issues)
 
 ---
