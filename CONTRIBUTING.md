@@ -1,13 +1,13 @@
 # 贡献指南
 
-感谢您对贡献 rate-limit 的兴趣！我们欢迎来自社区的贡献。
+感谢您对贡献 flex-rate-limit 的兴趣！我们欢迎来自社区的贡献。
 
 ## 开始
 
 1. **Fork 仓库**
    ```bash
-   git clone https://github.com/vextjs/rate-limit.git
-   cd rate-limit
+   git clone https://github.com/vextjs/flex-rate-limit.git
+   cd flex-rate-limit
    ```
 
 2. **安装依赖**

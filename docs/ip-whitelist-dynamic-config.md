@@ -82,7 +82,7 @@ GLOBAL_IP_WHITELIST=127.0.0.1,192.168.1.100
 
 **优先级**: 全局白名单 > 路由白名单
 
-**详细说明**: 参见 [配置场景详解](./whitelist-ratelimit-config-scenarios.md)
+**详细说明**: 参见 [配置场景详解](whitelist-ratelimit-config-scenarios.md)
 
 ---
 
@@ -92,7 +92,7 @@ GLOBAL_IP_WHITELIST=127.0.0.1,192.168.1.100
 
 ```bash
 # 1. 启动示例
-cd rate-limit
+cd flex-rate-limit
 GLOBAL_IP_WHITELIST=127.0.0.1 \
 ADMIN_IP_WHITELIST=192.168.1.10,192.168.1.11 \
 node examples/express-ip-whitelist-advanced.js

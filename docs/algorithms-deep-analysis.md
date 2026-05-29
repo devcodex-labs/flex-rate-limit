@@ -389,12 +389,11 @@ key:1 → count: 50   (窗口1的计数)
 
 ```javascript
 async function check(store, key, options) {
-  const { capacity = 10, refillRate = 1, windowMs = 1000 } = options;
+  const { capacity = 10, refillRate = capacity, windowMs = 1000, limit = capacity } = options;
   const now = Date.now();
 
   const data = await store.get(key);
   let tokens = capacity; // 初始桶满
-  let lastRefill = now;
 
   if (data) {
     // 计算经过的时间
@@ -405,17 +404,20 @@ async function check(store, key, options) {
     
     // 令牌数 = min(桶容量, 当前令牌 + 新补充的)
     tokens = Math.min(capacity, data.tokens + tokensToAdd);
-    lastRefill = data.lastRefill;
   }
 
   // 尝试消耗1个令牌
   if (tokens >= 1) {
     tokens -= 1;
-    await store.set(key, { tokens, lastRefill: now }, windowMs * capacity);
+    await store.set(key, { tokens, lastRefill: now }, Math.ceil((capacity / refillRate) * windowMs));
     
     return {
-      count: capacity - tokens, // 已使用的令牌数
-      resetTime: now + (1 / refillRate) * windowMs,
+      allowed: true,
+      limit,
+      current: limit - Math.max(0, Math.floor(tokens)),
+      remaining: Math.max(0, Math.floor(tokens)),
+      resetTime: now + Math.ceil(((capacity - tokens) / refillRate) * windowMs),
+      retryAfter: 0,
     };
   }
 
@@ -423,8 +425,12 @@ async function check(store, key, options) {
   const timeToNextToken = ((1 - tokens) / refillRate) * windowMs;
   
   return {
-    count: capacity + 1, // 超过限制
-    resetTime: now + timeToNextToken,
+    allowed: false,
+    limit,
+    current: limit,
+    remaining: 0,
+    resetTime: now + Math.ceil((capacity / refillRate) * windowMs),
+    retryAfter: Math.ceil(timeToNextToken),
   };
 }
 ```
@@ -624,12 +630,11 @@ tokens = 100（桶满）
 
 ```javascript
 async function check(store, key, options) {
-  const { capacity = 10, leakRate = 1, windowMs = 1000 } = options;
+  const { capacity = 10, leakRate = capacity, windowMs = 1000, limit = capacity } = options;
   const now = Date.now();
 
   const data = await store.get(key);
   let water = 0; // 桶内水量
-  let lastLeak = now;
 
   if (data) {
     // 计算经过的时间
@@ -640,26 +645,33 @@ async function check(store, key, options) {
     
     // 桶内水量 = max(0, 当前水量 - 漏出的)
     water = Math.max(0, data.water - waterLeaked);
-    lastLeak = data.lastLeak;
   }
 
   // 尝试添加水（请求）
-  if (water < capacity) {
+  if (water + 1 <= capacity) {
     water += 1;
-    await store.set(key, { water, lastLeak: now }, windowMs * capacity);
+    await store.set(key, { water, lastLeak: now }, Math.ceil((capacity / leakRate) * windowMs));
     
     return {
-      count: water,
-      resetTime: now + (water / leakRate) * windowMs,
+      allowed: true,
+      limit,
+      current: Math.min(limit, Math.ceil(water)),
+      remaining: Math.max(0, limit - Math.ceil(water)),
+      resetTime: now + Math.ceil((water / leakRate) * windowMs),
+      retryAfter: 0,
     };
   }
 
   // 桶已满，拒绝请求
-  const timeToLeak = ((water - capacity + 1) / leakRate) * windowMs;
+  const timeToLeak = ((water + 1 - capacity) / leakRate) * windowMs;
   
   return {
-    count: capacity + 1, // 超过限制
-    resetTime: now + timeToLeak,
+    allowed: false,
+    limit,
+    current: limit,
+    remaining: 0,
+    resetTime: now + Math.ceil((water / leakRate) * windowMs),
+    retryAfter: Math.ceil(timeToLeak),
   };
 }
 ```
@@ -1147,13 +1159,13 @@ const limiter = new RateLimiter({
 ## 📚 相关文档
 
 **快速指南**：
-- 📖 [算法对比指南](./algorithms-comparison.md) - 选择决策、使用场景、配置示例
+- 📖 [算法对比指南](algorithms-comparison.md) - 选择决策、使用场景、配置示例
 
 **应用配置**：
-- 📖 [配置详解](./config.md) - algorithm配置和实战场景
+- 📖 [配置详解](config.md) - algorithm配置和实战场景
 
 **返回**：
-- 📖 [文档中心](./README.md) - 查看所有文档和学习路径
+- 📖 [文档中心](README.md) - 查看所有文档和学习路径
 
 ---
 

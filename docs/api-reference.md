@@ -222,12 +222,12 @@ const limiter = new RateLimiter({
 ## 📚 相关文档
 
 **使用指南**：
-- 📖 [快速开始](./quickstart.md) - 快速上手和集成
-- 📖 [配置详解](./config.md) - 配置选项详细说明
-- 📖 [高级用法](./advanced.md) - 高级功能和自定义
+- 📖 [快速开始](quickstart.md) - 快速上手和集成
+- 📖 [配置详解](config.md) - 配置选项详细说明
+- 📖 [高级用法](advanced.md) - 高级功能和自定义
 
 **返回**：
-- 📖 [文档中心](./README.md) - 查看所有文档和学习路径
+- 📖 [文档中心](README.md) - 查看所有文档和学习路径
 
 ### 动态限制
 

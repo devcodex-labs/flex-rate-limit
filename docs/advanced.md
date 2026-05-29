@@ -18,7 +18,7 @@
 - 白名单 IP 也会被限流（独立版本）
 - 推荐配置：白名单 + 限流一起使用
 
-**详细说明**: [配置场景详解](./whitelist-ratelimit-config-scenarios.md) | [独立性说明](./whitelist-ratelimit-independence.md)
+**详细说明**: [配置场景详解](whitelist-ratelimit-config-scenarios.md) | [独立性说明](whitelist-ratelimit-independence.md)
 
 ---
 
@@ -475,7 +475,7 @@ GLOBAL_IP_WHITELIST=127.0.0.1,192.168.1.100
 # 效果：这些 IP 可访问所有路由，但仍受各路由限流
 ```
 
-**详细说明**: [配置场景完整文档](./whitelist-ratelimit-config-scenarios.md)
+**详细说明**: [配置场景完整文档](whitelist-ratelimit-config-scenarios.md)
 
 ---
 
@@ -694,15 +694,15 @@ await limiter.resetAll();
 ## 📚 相关文档
 
 **深入学习**：
-- 📖 [业务锁指南](./business-lock-guide.md) - 业务系统最佳实践
-- 📖 [存储后端](./storage.md) - Redis集群配置和性能优化
+- 📖 [业务锁指南](business-lock-guide.md) - 业务系统最佳实践
+- 📖 [存储后端](storage.md) - Redis集群配置和性能优化
 
 **基础知识**：
-- 📖 [配置详解](./config.md) - 配置选项详细说明
-- 📖 [快速开始](./quickstart.md) - 基础用法和快速集成
+- 📖 [配置详解](config.md) - 配置选项详细说明
+- 📖 [快速开始](quickstart.md) - 基础用法和快速集成
 
 **返回**：
-- 📖 [文档中心](./README.md) - 查看所有文档和学习路径
+- 📖 [文档中心](README.md) - 查看所有文档和学习路径
 
 
 

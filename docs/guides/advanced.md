@@ -461,11 +461,11 @@ await limiter.resetAll();
 ## 📚 相关文档
 
 **深入学习**：
-- 📖 [业务锁指南](./business-lock-guide.md) - 业务系统最佳实践
-- 📖 [存储后端](./storage.md) - Redis集群配置和性能优化
+- 📖 [业务锁指南](business-lock-guide.md) - 业务系统最佳实践
+- 📖 [存储后端](storage.md) - Redis集群配置和性能优化
 
 **基础知识**：
-- 📖 [配置详解](./config.md) - 配置选项详细说明
+- 📖 [配置详解](config.md) - 配置选项详细说明
 - 📖 [快速开始](./quickstart.md) - 基础用法和快速集成
 
 **返回**：

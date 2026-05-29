@@ -21,7 +21,7 @@
 | **白名单 + 限流** | 白名单验证 → 限流检查 | ⭐⭐⭐ 最推荐 |
 | **全局白名单** | 所有路由通用 + 各自限流 | ⭐⭐⭐ 推荐 |
 
-**详细说明**: [配置场景详解](./whitelist-ratelimit-config-scenarios.md)
+**详细说明**: [配置场景详解](whitelist-ratelimit-config-scenarios.md)
 
 ### 关键要点
 

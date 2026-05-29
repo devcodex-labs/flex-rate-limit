@@ -86,27 +86,32 @@ app.listen(3000);
 - **Hapi** - 预检查函数模式
 - **Fastify** - 钩子函数模式
 
-查看完整的框架集成示例：[docs/getting-started/quickstart.md](./docs/getting-started/quickstart.md)
+查看完整的框架集成示例：[docs/getting-started/quickstart.md](docs/getting-started/quickstart.md)
 
 ## 📚 文档
 
-👉 **[📚 完整文档导航](./docs/README.md)** - 查看所有文档、学习路径、场景查找
+👉 **[📚 完整文档导航](docs/README.md)** - 查看所有文档、学习路径、场景查找
+
+### 项目复审
+
+- 🧾 [Project Review (English)](REVIEW.md) - 当前实现与修复状态的默认审查文档
+- 🇨🇳 [项目复审（中文）](docs/review.zh-CN.md) - 英文 review 的中文译文与本地化说明
 
 ### 快速入口
 
 | 文档 | 说明 | 难度 |
 |------|------|------|
-| [快速开始](./docs/getting-started/quickstart.md) | 5分钟上手所有框架 | ⭐ 新手 |
-| [配置详解](./docs/guides/config.md) | 完整的配置选项说明 | ⭐⭐ 进阶 |
-| [业务锁指南](./docs/guides/business-lock-guide.md) | 用户ID+路由的精细化限流 | ⭐⭐⭐ 进阶 |
-| [算法对比指南](./docs/algorithms/comparison.md) | 4种算法对比与选择决策 | ⭐⭐⭐ 进阶 |
+| [快速开始](docs/getting-started/quickstart.md) | 5分钟上手所有框架 | ⭐ 新手 |
+| [配置详解](docs/guides/config.md) | 完整的配置选项说明 | ⭐⭐ 进阶 |
+| [业务锁指南](docs/guides/business-lock-guide.md) | 用户ID+路由的精细化限流 | ⭐⭐⭐ 进阶 |
+| [算法对比指南](docs/algorithms/comparison.md) | 4种算法对比与选择决策 | ⭐⭐⭐ 进阶 |
 
 ### 更多文档
 
-- 📖 [高级用法](./docs/guides/advanced.md) - 路由级限制、动态配置等
-- 📖 [存储后端](./docs/guides/storage.md) - Memory vs Redis性能对比
-- 📖 [算法深度分析](./docs/algorithms/deep-analysis.md) - 源码分析与瞬时超频
-- 📖 [API参考](./docs/reference/api-reference.md) - 完整API文档
+- 📖 [高级用法](docs/guides/advanced.md) - 路由级限制、动态配置等
+- 📖 [存储后端](docs/guides/storage.md) - Memory vs Redis性能对比
+- 📖 [算法深度分析](docs/algorithms/deep-analysis.md) - 源码分析与瞬时超频
+- 📖 [API参考](docs/reference/api-reference.md) - 完整API文档
 
 ## 🎯 核心概念
 
@@ -139,7 +144,7 @@ const limiter = new RateLimiter({
 - ✅ 公司网络/校园网用户互不影响
 - ✅ 精确控制每个用户的行为
 
-详见：[业务锁完整指南](./docs/business-lock-guide.md)
+详见：[业务锁完整指南](docs/business-lock-guide.md)
 
 ### IP 白名单与访问控制 ⭐⭐
 
@@ -173,7 +178,7 @@ const limiter = new RateLimiter({
 });
 ```
 
-**完整文档**: [高级用法 - IP 白名单章节](./docs/guides/advanced.md#ip-白名单与黑名单-)
+**完整文档**: [高级用法 - IP 白名单章节](docs/guides/advanced.md#ip-白名单与黑名单-)
 
 ### 动态 IP 白名单配置 ⭐⭐⭐
 
@@ -236,7 +241,7 @@ app.get('/api/admin/users',
 //   - 超限 → 429 Too Many Requests
 ```
 
-**详细说明**: [白名单与限流独立性文档](./docs/whitelist-ratelimit-independence.md)
+**详细说明**: [白名单与限流独立性文档](docs/whitelist-ratelimit-independence.md)
 
 **配置文件**: `config/ip-whitelist.json`
 
@@ -259,7 +264,7 @@ app.get('/api/admin/users',
 3. ✅ 全局白名单优先级更高（但仍需限流）
 4. ✅ 推荐配置：白名单 + 限流一起使用
 
-**详细配置场景**: [配置场景完整文档](./docs/whitelist-ratelimit-config-scenarios.md)
+**详细配置场景**: [配置场景完整文档](docs/whitelist-ratelimit-config-scenarios.md)
 
 ---
 
@@ -361,12 +366,12 @@ npm run coverage
 
 ## 💬 支持
 
-- 📫 问题：[GitHub Issues](https://github.com/vextjs/rate-limit/issues)
-- 💡 功能请求：[GitHub Discussions](https://github.com/vextjs/rate-limit/discussions)
+- 📫 问题：[GitHub Issues](https://github.com/vextjs/flex-rate-limit/issues)
+- 💡 功能请求：[GitHub Discussions](https://github.com/vextjs/flex-rate-limit/discussions)
 
 ## 📄 许可证
 
-[MIT](./LICENSE)
+[MIT](LICENSE)
 
 ---
 

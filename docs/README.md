@@ -1,7 +1,22 @@
-# 📚 rate-limit 文档中心
+# 📚 flex-rate-limit 文档中心
 
-> **版本**: 1.0.0  
-> **更新**: 2026-02-05
+> **项目**: flex-rate-limit
+> **版本**: 1.0.5
+> **运行时**: Node.js >= 14
+> **仓库**: https://github.com/vextjs/flex-rate-limit
+> **更新**: 2026-05-29
+
+---
+
+## 🧾 项目复审
+
+- 默认英文 review：[`../REVIEW.md`](../REVIEW.md)
+- 中文译文：[`review.zh-CN.md`](review.zh-CN.md)
+
+这两份文档用于说明 2026-05-29 的“审查结论与实现状态是否一致”复核结果：
+
+- 英文版作为默认 review 文档，面向仓库读者与外部协作者
+- 中文版作为对照译文，补充本地语境说明
 
 ---
 
@@ -11,10 +26,10 @@
 
 从这里开始，快速上手限流功能：
 
-1. **[快速开始](./getting-started/quickstart.md)** ⭐  
+1. **[快速开始](getting-started/quickstart.md)** ⭐
    5分钟上手所有主流框架（Express、Koa、Egg.js、Hapi、Fastify）
    
-2. **[配置详解](./guides/config.md)**  
+2. **[配置详解](guides/config.md)**
    了解所有配置选项和推荐配置
 
 ---
@@ -23,22 +38,22 @@
 
 深入学习各种使用场景：
 
-3. **[高级用法](./guides/advanced.md)**  
+3. **[高级用法](guides/advanced.md)**
    路由级限流、动态配置、自定义键生成器
    
-4. **[业务锁指南](./guides/business-lock-guide.md)** ⭐  
+4. **[业务锁指南](guides/business-lock-guide.md)** ⭐
    用户ID+路由的精细化限流控制
    
-5. **[存储后端](./guides/storage.md)**  
+5. **[存储后端](guides/storage.md)**
    Memory vs Redis，性能对比与选择决策
 
-6. **[IP 白名单配置场景](./whitelist-ratelimit-config-scenarios.md)** ⭐ 新增  
+6. **[IP 白名单配置场景](whitelist-ratelimit-config-scenarios.md)** ⭐ 新增
    四个核心配置场景详解（必读）
 
-7. **[白名单与限流独立性](./whitelist-ratelimit-independence.md)** ⭐ 新增  
+7. **[白名单与限流独立性](whitelist-ratelimit-independence.md)** ⭐ 新增
    耦合版本 vs 独立版本对比说明
 
-8. **[IP 白名单动态配置](./ip-whitelist-dynamic-config.md)**  
+8. **[IP 白名单动态配置](ip-whitelist-dynamic-config.md)**
    快速使用指南和配置方式
 
 ---
@@ -47,10 +62,10 @@
 
 深入理解限流算法：
 
-6. **[算法对比指南](./algorithms/comparison.md)** ⭐  
+6. **[算法对比指南](algorithms/comparison.md)** ⭐
    4种算法对比、选择决策、配置示例
    
-7. **[算法深度分析](./algorithms/deep-analysis.md)**  
+7. **[算法深度分析](algorithms/deep-analysis.md)**
    源码级分析、瞬时超频计算、性能数据
 
 ---
@@ -59,7 +74,7 @@
 
 快速查询API：
 
-8. **[API参考](./reference/api-reference.md)**  
+8. **[API参考](reference/api-reference.md)**
    完整的类、方法、参数文档
 
 ---
@@ -177,49 +192,49 @@ whitelist-ratelimit-config-scenarios.md → whitelist-ratelimit-independence.md
 - ✅ 能实现动态管理白名单
 
 **关键文档**：
-1. [配置场景详解](./whitelist-ratelimit-config-scenarios.md) - 必读
-2. [独立性说明](./whitelist-ratelimit-independence.md) - 理解原理
-3. [动态配置指南](./ip-whitelist-dynamic-config.md) - 实战应用
+1. [配置场景详解](whitelist-ratelimit-config-scenarios.md) - 必读
+2. [独立性说明](whitelist-ratelimit-independence.md) - 理解原理
+3. [动态配置指南](ip-whitelist-dynamic-config.md) - 实战应用
 
 ---
 
 ## 🔍 按场景查找
 
 ### 我想实现登录保护
-→ [getting-started/quickstart.md](./getting-started/quickstart.md) - 场景1：登录保护
+→ [getting-started/quickstart.md](getting-started/quickstart.md) - 场景1：登录保护
 
 ### 我想用Redis
-→ [guides/storage.md](./guides/storage.md) - Redis配置
+→ [guides/storage.md](guides/storage.md) - Redis配置
 
 ### 我想按用户限流
-→ [guides/business-lock-guide.md](./guides/business-lock-guide.md)
+→ [guides/business-lock-guide.md](guides/business-lock-guide.md)
 
 ### 我想配置 IP 白名单 ⭐
-→ [whitelist-ratelimit-config-scenarios.md](./whitelist-ratelimit-config-scenarios.md) - 四个核心场景
+→ [whitelist-ratelimit-config-scenarios.md](whitelist-ratelimit-config-scenarios.md) - 四个核心场景
 
 ### 我想知道"只配置限流"会怎样 ⭐
-→ [whitelist-ratelimit-config-scenarios.md](./whitelist-ratelimit-config-scenarios.md#问题-1-限流配置了-internal但白名单没配置-internal)
+→ [whitelist-ratelimit-config-scenarios.md](whitelist-ratelimit-config-scenarios.md#问题-1-限流配置了-internal但白名单没配置-internal)
 
 ### 我想知道"只配置白名单"会怎样 ⭐
-→ [whitelist-ratelimit-config-scenarios.md](./whitelist-ratelimit-config-scenarios.md#问题-2-白名单配置了-internal但限流没配置-internal)
+→ [whitelist-ratelimit-config-scenarios.md](whitelist-ratelimit-config-scenarios.md#问题-2-白名单配置了-internal但限流没配置-internal)
 
 ### 我想配置全局白名单 ⭐
-→ [whitelist-ratelimit-config-scenarios.md](./whitelist-ratelimit-config-scenarios.md#问题-4-白名单能否配置全局路由)
+→ [whitelist-ratelimit-config-scenarios.md](whitelist-ratelimit-config-scenarios.md#问题-4-白名单能否配置全局路由)
 
 ### 我想理解白名单和限流的关系 ⭐
-→ [whitelist-ratelimit-independence.md](./whitelist-ratelimit-independence.md)
+→ [whitelist-ratelimit-independence.md](whitelist-ratelimit-independence.md)
 
 ### 我想选择算法
-→ [algorithms/comparison.md](./algorithms/comparison.md) - 选择决策树
+→ [algorithms/comparison.md](algorithms/comparison.md) - 选择决策树
 
 ### 我想优化性能
-→ [algorithms/deep-analysis.md](./algorithms/deep-analysis.md) - 性能对比
+→ [algorithms/deep-analysis.md](algorithms/deep-analysis.md) - 性能对比
 
 ### 我想了解所有配置选项
-→ [guides/config.md](./guides/config.md) - 完整配置说明
+→ [guides/config.md](guides/config.md) - 完整配置说明
 
 ### 我想实现路由级限流
-→ [guides/advanced.md](./guides/advanced.md) - 路由级限流示例
+→ [guides/advanced.md](guides/advanced.md) - 路由级限流示例
 
 ---
 
@@ -356,27 +371,27 @@ whitelist-ratelimit-config-scenarios.md → whitelist-ratelimit-independence.md
 ### 常见问题
 
 **Q: 我应该从哪个文档开始？**
-A: 从 [quickstart.md](./quickstart.md) 开始，5分钟就能上手。
+A: 从 [quickstart.md](quickstart.md) 开始，5分钟就能上手。
 
 **Q: 我如何选择算法？**
-A: 查看 [algorithms-comparison.md](./algorithms-comparison.md) 的选择决策树。
+A: 查看 [algorithms-comparison.md](algorithms-comparison.md) 的选择决策树。
 
 **Q: 登录接口应该怎么配置？**
-A: 推荐 `strict` 级别：15分钟5次，参考 [quickstart.md](./quickstart.md)。
+A: 推荐 `strict` 级别：15分钟5次，参考 [quickstart.md](quickstart.md)。
 
 **Q: Memory 和 Redis 如何选择？**
-A: 单服务器用Memory，多服务器用Redis，详见 [storage.md](./storage.md)。
+A: 单服务器用Memory，多服务器用Redis，详见 [storage.md](storage.md)。
 
 **Q: 什么是业务锁？**
-A: 按用户+路由限流，每个用户在每个接口独立限额，详见 [business-lock-guide.md](./business-lock-guide.md)。
+A: 按用户+路由限流，每个用户在每个接口独立限额，详见 [business-lock-guide.md](business-lock-guide.md)。
 
 ---
 
 ### 获取支持
 
-- 💬 [GitHub Issues](https://github.com/vextjs/rate-limit/issues)
+- 💬 [GitHub Issues](https://github.com/vextjs/flex-rate-limit/issues)
+- 💡 [GitHub Discussions](https://github.com/vextjs/flex-rate-limit/discussions)
 - 📖 [示例代码](../examples/)
-- 📧 Email: support@vextjs.com
 
 ---
 
@@ -385,7 +400,9 @@ A: 按用户+路由限流，每个用户在每个接口独立限额，详见 [bu
 - 📖 [项目首页](../README.md)
 - 💻 [示例代码](../examples/)
 - 📦 [npm 包](https://www.npmjs.com/package/flex-rate-limit)
-- 🐛 [报告问题](https://github.com/vextjs/rate-limit/issues)
+- 🧾 [英文 Review](../REVIEW.md)
+- 🇨🇳 [中文 Review](review.zh-CN.md)
+- 🐛 [报告问题](https://github.com/vextjs/flex-rate-limit/issues)
 
 ---
 

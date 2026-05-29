@@ -1,6 +1,6 @@
-// Type definitions for flex-rate-limit v1.0.0
-// Project: https://github.com/vextjs/rate-limit
-// Definitions by: rate-limit Team
+// Type definitions for flex-rate-limit v1.0.5
+// Project: https://github.com/vextjs/flex-rate-limit
+// Definitions by: vext.js Team
 
 // ========== 核心类型 ==========
 
@@ -18,9 +18,9 @@ export interface RateLimitResult {
 }
 
 /**
- * 速率限制器配置选项
+ * 速率限制规则选项
  */
-export interface RateLimiterOptions {
+export interface RateLimiterRuleOptions {
   /**
    * 时间窗口大小（毫秒）
    * @default 60000 (1分钟)
@@ -38,28 +38,6 @@ export interface RateLimiterOptions {
    * @default 'sliding-window'
    */
   algorithm?: 'sliding-window' | 'fixed-window' | 'token-bucket' | 'leaky-bucket';
-
-  /**
-   * 存储后端
-   * - Store 实例：自定义或内置的存储后端（MemoryStore、RedisStore）
-   * - 'memory'：使用默认内存存储
-   * @default 'memory'
-   * @example
-   * ```typescript
-   * // 使用内存存储
-   * store: 'memory'
-   *
-   * // 使用 Redis 存储
-   * const redis = new Redis();
-   * store: new RedisStore({ client: redis })
-   *
-   * // 条件使用（Egg.js 风格）
-   * store: ctx.app.redis
-   *   ? new RedisStore({ client: ctx.app.redis })
-   *   : 'memory'
-   * ```
-   */
-  store?: Store | 'memory';
 
   /**
    * 从请求对象生成限流键的函数
@@ -126,14 +104,44 @@ export interface RateLimiterOptions {
    */
   leakRate?: number;
 
+}
+
+/**
+ * 路由级别配置
+ */
+export interface PerRouteOptions extends Partial<RateLimiterRuleOptions> {}
+
+/**
+ * 速率限制器配置选项
+ */
+export interface RateLimiterOptions extends RateLimiterRuleOptions {
+  /**
+   * 存储后端
+   * - Store 实例：自定义或内置的存储后端（MemoryStore、RedisStore）
+   * - 'memory'：使用默认内存存储
+   * @default 'memory'
+   * @example
+   * ```typescript
+   * // 使用内存存储
+   * store: 'memory'
+   *
+   * // 使用 Redis 存储
+   * const redis = new Redis();
+   * store: new RedisStore({ client: redis })
+   *
+   * // 条件使用（Egg.js 风格）
+   * store: ctx.app.redis
+   *   ? new RedisStore({ client: ctx.app.redis })
+   *   : 'memory'
+   * ```
+   */
+  store?: Store | 'memory';
+
   /**
    * 路由级别配置：为不同路由设置不同的限制
    */
   perRoute?: {
-    [route: string]: {
-      windowMs?: number;
-      max?: number;
-    };
+    [route: string]: PerRouteOptions;
   };
 }
 
@@ -167,9 +175,25 @@ export interface RedisClient {
   ttl?(key: string): Promise<number>;
   zadd(key: string, score: number, member: string): Promise<number>;
   zcard(key: string): Promise<number>;
+  zrange?(key: string, start: number, stop: number, withScores?: 'WITHSCORES'): Promise<string[]>;
+  zrem?(key: string, member: string): Promise<number>;
   zremrangebyscore(key: string, min: string | number, max: string | number): Promise<number>;
   zpopmax(key: string): Promise<string[]>;
   type(key: string): Promise<string>;
+  scan?(cursor: string, ...args: Array<string | number>): Promise<[string, string[]]>;
+  pipeline?(): RedisPipeline;
+}
+
+/**
+ * Redis pipeline 接口
+ */
+export interface RedisPipeline {
+  zremrangebyscore(key: string, min: string | number, max: string | number): RedisPipeline;
+  zadd(key: string, score: number, member: string): RedisPipeline;
+  expire(key: string, seconds: number): RedisPipeline;
+  zrange(key: string, start: number, stop: number, withScores?: 'WITHSCORES'): RedisPipeline;
+  zcard(key: string): RedisPipeline;
+  exec(): Promise<Array<[Error | null, any]>>;
 }
 
 /**
@@ -236,7 +260,18 @@ export interface KeyGenerators {
  * 中间件选项（预留用于未来扩展）
  */
 export interface MiddlewareOptions {
-  [key: string]: any;
+  windowMs?: number;
+  max?: number | ((req: any) => number | Promise<number>);
+  algorithm?: 'sliding-window' | 'fixed-window' | 'token-bucket' | 'leaky-bucket';
+  keyGenerator?: (req: any, context?: { route?: string }) => string | Promise<string>;
+  skip?: (req: any) => boolean | Promise<boolean>;
+  handler?: (req: any, res: any, next?: Function) => void | Promise<void>;
+  headers?: boolean;
+  skipSuccessfulRequests?: boolean;
+  skipFailedRequests?: boolean;
+  capacity?: number;
+  refillRate?: number;
+  leakRate?: number;
 }
 
 // ========== 导出的类 ==========

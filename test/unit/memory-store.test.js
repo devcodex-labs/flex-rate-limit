@@ -98,8 +98,7 @@ describe('MemoryStore', () => {
     it('should clear expiration timer', async () => {
       await store.set('timer-key', { count: 1 }, 5000);
       await store.reset('timer-key');
-
-      expect(store.timers.has('timer-key')).to.be.false;
+      expect(await store.get('timer-key')).to.be.undefined;
     });
   });
 
@@ -122,7 +121,7 @@ describe('MemoryStore', () => {
 
       await store.resetAll();
 
-      expect(store.timers.size).to.equal(0);
+      expect(store.size()).to.equal(0);
     });
   });
 
@@ -138,6 +137,15 @@ describe('MemoryStore', () => {
 
       await store.reset('key1');
       expect(store.size()).to.equal(1);
+    });
+
+    it('should ignore expired keys when calculating size', async function() {
+      this.timeout(5000);
+
+      await store.set('expiring', { count: 1 }, 1000);
+      await new Promise((resolve) => setTimeout(resolve, 1100));
+
+      expect(store.size()).to.equal(0);
     });
   });
 });

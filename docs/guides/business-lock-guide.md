@@ -725,8 +725,8 @@ async checkLimitStatus(ctx) {
 ## 📚 相关文档
 
 **配置参考**：
-- 📖 [配置详解](./config.md) - keyGenerator配置说明
-- 📖 [高级用法](./advanced.md) - 自定义键生成器详解
+- 📖 [配置详解](config.md) - keyGenerator配置说明
+- 📖 [高级用法](advanced.md) - 自定义键生成器详解
 
 **基础知识**：
 - 📖 [快速开始](./quickstart.md) - 基本用法和快速集成

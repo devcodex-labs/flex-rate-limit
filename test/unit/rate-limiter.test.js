@@ -1,5 +1,24 @@
 const { expect } = require('chai');
+const EventEmitter = require('events');
 const { RateLimiter } = require('../../lib');
+
+function createMockResponse() {
+  const res = new EventEmitter();
+  res.headers = {};
+  res.statusCode = 200;
+  res.setHeader = (key, value) => {
+    res.headers[key] = value;
+  };
+  res.status = (code) => {
+    res.statusCode = code;
+    return res;
+  };
+  res.json = (payload) => {
+    res.payload = payload;
+    return res;
+  };
+  return res;
+}
 
 describe('RateLimiter', () => {
   describe('Constructor', () => {
@@ -72,6 +91,36 @@ describe('RateLimiter', () => {
       expect(result.retryAfter).to.be.greaterThan(0);
     });
 
+    it('should enforce token bucket capacity when capacity is omitted', async () => {
+      const limiter = new RateLimiter({
+        algorithm: 'token-bucket',
+        windowMs: 60000,
+        max: 2,
+      });
+
+      expect((await limiter.check('token-default')).allowed).to.be.true;
+      expect((await limiter.check('token-default')).allowed).to.be.true;
+
+      const result = await limiter.check('token-default');
+      expect(result.allowed).to.be.false;
+      expect(result.limit).to.equal(2);
+    });
+
+    it('should enforce leaky bucket capacity when capacity is omitted', async () => {
+      const limiter = new RateLimiter({
+        algorithm: 'leaky-bucket',
+        windowMs: 60000,
+        max: 2,
+      });
+
+      expect((await limiter.check('leaky-default')).allowed).to.be.true;
+      expect((await limiter.check('leaky-default')).allowed).to.be.true;
+
+      const result = await limiter.check('leaky-default');
+      expect(result.allowed).to.be.false;
+      expect(result.limit).to.equal(2);
+    });
+
     it('should throw error for invalid key', async () => {
       const limiter = new RateLimiter();
 
@@ -121,6 +170,24 @@ describe('RateLimiter', () => {
       expect(result.allowed).to.be.true;
       expect(result.current).to.equal(1);
     });
+
+    it('should reset fixed window counters in the active window', async () => {
+      const limiter = new RateLimiter({
+        algorithm: 'fixed-window',
+        windowMs: 60000,
+        max: 1,
+      });
+
+      await limiter.check('fixed-reset');
+      let result = await limiter.check('fixed-reset');
+      expect(result.allowed).to.be.false;
+
+      await limiter.reset('fixed-reset');
+
+      result = await limiter.check('fixed-reset');
+      expect(result.allowed).to.be.true;
+      expect(result.current).to.equal(1);
+    });
   });
 
   describe('resetAll()', () => {
@@ -163,9 +230,7 @@ describe('RateLimiter', () => {
       let nextCalled = false;
 
       const req = { ip: '127.0.0.1' };
-      const res = {
-        setHeader: () => {},
-      };
+      const res = createMockResponse();
       const next = () => {
         nextCalled = true;
       };
@@ -181,21 +246,16 @@ describe('RateLimiter', () => {
       });
 
       const middleware = limiter.middleware();
-      const headers = {};
+      const res = createMockResponse();
 
       const req = { ip: '127.0.0.1' };
-      const res = {
-        setHeader: (key, value) => {
-          headers[key] = value;
-        },
-      };
       const next = () => {};
 
       await middleware(req, res, next);
 
-      expect(headers['X-RateLimit-Limit']).to.exist;
-      expect(headers['X-RateLimit-Remaining']).to.exist;
-      expect(headers['X-RateLimit-Reset']).to.exist;
+      expect(res.headers['X-RateLimit-Limit']).to.exist;
+      expect(res.headers['X-RateLimit-Remaining']).to.exist;
+      expect(res.headers['X-RateLimit-Reset']).to.exist;
     });
 
     it('should skip rate limiting when skip function returns true', async () => {
@@ -209,7 +269,7 @@ describe('RateLimiter', () => {
       let nextCalled = false;
 
       const req = { ip: '127.0.0.1', path: '/health' };
-      const res = { setHeader: () => {} };
+      const res = createMockResponse();
       const next = () => {
         nextCalled = true;
       };
@@ -221,15 +281,95 @@ describe('RateLimiter', () => {
 
       expect(nextCalled).to.be.true;
     });
+
+    it('should honor middleware overrides', async () => {
+      const limiter = new RateLimiter({
+        windowMs: 60000,
+        max: 10,
+      });
+
+      const middleware = limiter.middleware({ max: 1 });
+      const req = { ip: '127.0.0.1', path: '/login' };
+      const firstRes = createMockResponse();
+      const secondRes = createMockResponse();
+
+      await middleware(req, firstRes, () => {});
+      await middleware(req, secondRes, () => {});
+
+      expect(secondRes.statusCode).to.equal(429);
+    });
+
+    it('should honor perRoute overrides', async () => {
+      const limiter = new RateLimiter({
+        windowMs: 60000,
+        max: 10,
+        perRoute: {
+          '/login': { max: 1 },
+        },
+      });
+
+      const middleware = limiter.middleware();
+      const req = { ip: '127.0.0.1', path: '/login' };
+      const firstRes = createMockResponse();
+      const secondRes = createMockResponse();
+
+      await middleware(req, firstRes, () => {});
+      await middleware(req, secondRes, () => {});
+
+      expect(secondRes.statusCode).to.equal(429);
+    });
+
+    it('should rollback successful requests when skipSuccessfulRequests is enabled', async () => {
+      const limiter = new RateLimiter({
+        windowMs: 60000,
+        max: 1,
+        skipSuccessfulRequests: true,
+      });
+
+      const middleware = limiter.middleware();
+      const req = { ip: '127.0.0.1', path: '/ok' };
+
+      const firstRes = createMockResponse();
+      await middleware(req, firstRes, () => {});
+      firstRes.emit('finish');
+      await new Promise((resolve) => setImmediate(resolve));
+
+      const secondRes = createMockResponse();
+      await middleware(req, secondRes, () => {});
+
+      expect(secondRes.statusCode).to.equal(200);
+      expect(secondRes.payload).to.be.undefined;
+    });
+
+    it('should not call next with error after sending 429 response', async () => {
+      const limiter = new RateLimiter({
+        windowMs: 60000,
+        max: 1,
+      });
+
+      const middleware = limiter.middleware();
+      const req = { ip: '127.0.0.1', path: '/api' };
+      const firstRes = createMockResponse();
+      const secondRes = createMockResponse();
+      const calls = [];
+
+      await middleware(req, firstRes, (error) => {
+        calls.push(error ? error.message : 'next');
+      });
+      await middleware(req, secondRes, (error) => {
+        calls.push(error ? error.message : 'next');
+      });
+
+      expect(secondRes.statusCode).to.equal(429);
+      expect(calls).to.deep.equal(['next']);
+    });
   });
 
   describe('Custom max function', () => {
     it('should support dynamic max limit', async () => {
       const limiter = new RateLimiter({
         windowMs: 60000,
-        max: async (req) => {
-          return req.isPremium ? 100 : 10;
-        },
+        max: (req) => (req.isPremium ? 100 : 10),
       });
 
       const result1 = await limiter.check('user1', { req: { isPremium: true } });

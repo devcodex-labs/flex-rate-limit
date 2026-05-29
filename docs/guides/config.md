@@ -312,7 +312,7 @@ keyGenerator: (req, context) => {
 - 按用户：`keyGenerators.userId`（登录后API）
 - 按用户+路由：`keyGenerators.userAndRoute`（业务锁，推荐）⭐
 
-📖 **详细说明**：[business-lock-guide.md](./business-lock-guide.md)
+📖 **详细说明**：[business-lock-guide.md](business-lock-guide.md)
 
 ---
 
@@ -533,12 +533,12 @@ const limiter = new RateLimiter({
 ## 📚 相关文档
 
 **下一步阅读**：
-- 📖 [高级用法](./advanced.md) - 路由级限流、动态配置
+- 📖 [高级用法](advanced.md) - 路由级限流、动态配置
 - 📖 [算法对比指南](./algorithms-comparison.md) - 深入理解算法选择
 
 **相关主题**：
-- 📖 [业务锁指南](./business-lock-guide.md) - keyGenerator详解
-- 📖 [存储后端](./storage.md) - Redis配置和性能对比
+- 📖 [业务锁指南](business-lock-guide.md) - keyGenerator详解
+- 📖 [存储后端](storage.md) - Redis配置和性能对比
 - 📖 [快速开始](./quickstart.md) - 基础用法
 
 **返回**：

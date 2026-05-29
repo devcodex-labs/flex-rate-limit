@@ -354,8 +354,8 @@ const limiter = new RateLimiter({
 ## 📚 相关文档
 
 **相关配置**：
-- 📖 [配置详解](./config.md) - store配置选项说明
-- 📖 [高级用法](./advanced.md) - 自定义存储后端实现
+- 📖 [配置详解](config.md) - store配置选项说明
+- 📖 [高级用法](advanced.md) - 自定义存储后端实现
 
 **性能优化**：
 - 📖 [算法深度分析](./algorithms-deep-analysis.md) - 性能对比数据和优化建议

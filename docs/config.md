@@ -118,8 +118,8 @@ algorithm: 'leaky-bucket'    // 漏桶（平滑流量）
 | **leaky-bucket** | ⭐⭐⭐⭐ | 低 | 流量整形、保护后端 | ⭐⭐⭐⭐ | [👉 详细说明](#4-leaky-bucket漏桶---平滑流量) |
 
 💡 **算法对比文档**：
-- 📖 [算法对比指南](./algorithms-comparison.md) - 选择决策、配置示例、实战推荐
-- 📖 [算法深度分析](./algorithms-deep-analysis.md) - 实现原理、瞬时超频分析、源码解读
+- 📖 [算法对比指南](algorithms-comparison.md) - 选择决策、配置示例、实战推荐
+- 📖 [算法深度分析](algorithms-deep-analysis.md) - 实现原理、瞬时超频分析、源码解读
 
 #### 算法详解
 
@@ -253,8 +253,8 @@ algorithm: 'leaky-bucket'    // 漏桶（平滑流量）
 **适用**：保护后端系统、需要恒定输出速率的场景
 
 📖 **详细文档**：
-- [算法对比指南](./algorithms-comparison.md) - 使用场景、配置示例、选择决策
-- [算法深度分析](./algorithms-deep-analysis.md) - 实现原理、瞬时超频分析
+- [算法对比指南](algorithms-comparison.md) - 使用场景、配置示例、选择决策
+- [算法深度分析](algorithms-deep-analysis.md) - 实现原理、瞬时超频分析
 
 ---
 
@@ -312,7 +312,7 @@ keyGenerator: (req, context) => {
 - 按用户：`keyGenerators.userId`（登录后API）
 - 按用户+路由：`keyGenerators.userAndRoute`（业务锁，推荐）⭐
 
-📖 **详细说明**：[business-lock-guide.md](./business-lock-guide.md)
+📖 **详细说明**：[business-lock-guide.md](business-lock-guide.md)
 
 ---
 
@@ -533,16 +533,16 @@ const limiter = new RateLimiter({
 ## 📚 相关文档
 
 **下一步阅读**：
-- 📖 [高级用法](./advanced.md) - 路由级限流、动态配置
-- 📖 [算法对比指南](./algorithms-comparison.md) - 深入理解算法选择
+- 📖 [高级用法](advanced.md) - 路由级限流、动态配置
+- 📖 [算法对比指南](algorithms-comparison.md) - 深入理解算法选择
 
 **相关主题**：
-- 📖 [业务锁指南](./business-lock-guide.md) - keyGenerator详解
-- 📖 [存储后端](./storage.md) - Redis配置和性能对比
-- 📖 [快速开始](./quickstart.md) - 基础用法
+- 📖 [业务锁指南](business-lock-guide.md) - keyGenerator详解
+- 📖 [存储后端](storage.md) - Redis配置和性能对比
+- 📖 [快速开始](quickstart.md) - 基础用法
 
 **返回**：
-- 📖 [文档中心](./README.md) - 查看所有文档和学习路径
+- 📖 [文档中心](README.md) - 查看所有文档和学习路径
   }),
 });
 ```
