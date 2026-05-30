@@ -14,12 +14,18 @@ jobs:
       matrix:
         node-version: [14.x, 16.x, 18.x, 20.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - node-version: 14.x
+            os: macos-13
+        exclude:
+          - node-version: 14.x
+            os: macos-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
 
@@ -58,10 +64,10 @@ jobs:
           --health-retries 5
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Use Node.js 18.x
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 18.x
 

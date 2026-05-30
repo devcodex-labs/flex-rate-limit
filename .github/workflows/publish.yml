@@ -13,6 +13,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       contents: read
       id-token: write
 
@@ -35,6 +36,62 @@ jobs:
             echo "Tag v${TAG_VERSION} does not match package.json version ${PKG_VERSION}"
             exit 1
           fi
+
+      - name: Wait for CI success on this commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+        run: |
+          node <<'NODE'
+          const { setTimeout: sleep } = require('node:timers/promises');
+
+          const repository = process.env.REPOSITORY;
+          const sha = process.env.SHA;
+          const token = process.env.GH_TOKEN;
+          const headers = {
+            'Accept': 'application/vnd.github+json',
+            'Authorization': `Bearer ${token}`,
+            'User-Agent': 'flex-rate-limit-release-gate',
+            'X-GitHub-Api-Version': '2022-11-28',
+          };
+
+          async function request(path) {
+            const response = await fetch(`https://api.github.com/repos/${repository}${path}`, { headers });
+            if (!response.ok) {
+              throw new Error(`GitHub API ${response.status}: ${await response.text()}`);
+            }
+            return response.json();
+          }
+
+          for (let attempt = 0; attempt < 60; attempt += 1) {
+            const data = await request(`/actions/workflows/ci.yml/runs?head_sha=${sha}&event=push&per_page=20`);
+            const runs = data.workflow_runs || [];
+            const completed = runs.find((run) => run.status === 'completed');
+            const active = runs.find((run) => run.status === 'in_progress' || run.status === 'queued' || run.status === 'waiting');
+
+            if (completed?.conclusion === 'success') {
+              console.log(`CI passed for ${sha}: ${completed.html_url}`);
+              process.exit(0);
+            }
+
+            if (completed && completed.conclusion !== 'success') {
+              console.error(`CI did not pass for ${sha}: ${completed.conclusion}`);
+              console.error(completed.html_url);
+              process.exit(1);
+            }
+
+            if (active) {
+              console.log(`Waiting for CI (${active.status}): ${active.html_url}`);
+            } else {
+              console.log(`Waiting for CI run for ${sha}`);
+            }
+            await sleep(15000);
+          }
+
+          console.error(`Timed out waiting for CI success for ${sha}`);
+          process.exit(1);
+          NODE
 
       - name: Install dependencies
         run: npm ci
