@@ -7,6 +7,11 @@
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-05-30
+
+### Breaking Changes
+- 将最低运行时提升为 Node.js 18。仍需 Node.js 14/16 的消费者请继续使用 `1.x` 版本线。
+
 ### 变更
 - 将最低运行时提升为 Node.js 18，并将 GitHub Actions CI 矩阵收敛为 Node.js 18/20。
 - 升级 GitHub Actions 基础 actions 到支持 Node 24 runtime 的主版本，消除即将到来的 runner runtime 弃用风险。
