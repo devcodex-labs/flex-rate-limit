@@ -64,33 +64,37 @@ jobs:
             return response.json();
           }
 
-          for (let attempt = 0; attempt < 60; attempt += 1) {
-            const data = await request(`/actions/workflows/ci.yml/runs?head_sha=${sha}&event=push&per_page=20`);
-            const runs = data.workflow_runs || [];
-            const completed = runs.find((run) => run.status === 'completed');
-            const active = runs.find((run) => run.status === 'in_progress' || run.status === 'queued' || run.status === 'waiting');
+          async function main() {
+            for (let attempt = 0; attempt < 60; attempt += 1) {
+              const data = await request(`/actions/workflows/ci.yml/runs?head_sha=${sha}&event=push&per_page=20`);
+              const runs = data.workflow_runs || [];
+              const completed = runs.find((run) => run.status === 'completed');
+              const active = runs.find((run) => run.status === 'in_progress' || run.status === 'queued' || run.status === 'waiting');
 
-            if (completed?.conclusion === 'success') {
-              console.log(`CI passed for ${sha}: ${completed.html_url}`);
-              process.exit(0);
+              if (completed?.conclusion === 'success') {
+                console.log(`CI passed for ${sha}: ${completed.html_url}`);
+                return;
+              }
+
+              if (completed && completed.conclusion !== 'success') {
+                throw new Error(`CI did not pass for ${sha}: ${completed.conclusion}\n${completed.html_url}`);
+              }
+
+              if (active) {
+                console.log(`Waiting for CI (${active.status}): ${active.html_url}`);
+              } else {
+                console.log(`Waiting for CI run for ${sha}`);
+              }
+              await sleep(15000);
             }
 
-            if (completed && completed.conclusion !== 'success') {
-              console.error(`CI did not pass for ${sha}: ${completed.conclusion}`);
-              console.error(completed.html_url);
-              process.exit(1);
-            }
-
-            if (active) {
-              console.log(`Waiting for CI (${active.status}): ${active.html_url}`);
-            } else {
-              console.log(`Waiting for CI run for ${sha}`);
-            }
-            await sleep(15000);
+            throw new Error(`Timed out waiting for CI success for ${sha}`);
           }
 
-          console.error(`Timed out waiting for CI success for ${sha}`);
-          process.exit(1);
+          main().catch((error) => {
+            console.error(error.message);
+            process.exit(1);
+          });
           NODE
 
       - name: Install dependencies
