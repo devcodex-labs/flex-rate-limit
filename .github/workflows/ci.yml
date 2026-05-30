@@ -29,10 +29,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Use npm 9 on Node.js 14
-      if: startsWith(matrix.node-version, '14.')
-      run: npm install -g npm@9
-
     - name: Install dependencies
       run: npm ci
 
