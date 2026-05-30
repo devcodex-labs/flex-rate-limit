@@ -7,6 +7,9 @@
 
 ## [Unreleased]
 
+### 变更
+- 将最低运行时提升为 Node.js 18，并将 GitHub Actions CI 矩阵收敛为 Node.js 18/20。
+
 ## [1.0.6] - 2026-05-30
 
 ### 变更

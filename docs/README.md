@@ -2,7 +2,7 @@
 
 > **项目**: flex-rate-limit
 > **版本**: 1.0.6
-> **运行时**: Node.js >= 14
+> **运行时**: Node.js >= 18
 > **仓库**: https://github.com/vextjs/flex-rate-limit
 > **Website**: https://vextjs.github.io/flex-rate-limit
 > **更新**: 2026-05-30
