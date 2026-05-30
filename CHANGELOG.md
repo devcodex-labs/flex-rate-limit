@@ -9,6 +9,7 @@
 
 ### 变更
 - 将最低运行时提升为 Node.js 18，并将 GitHub Actions CI 矩阵收敛为 Node.js 18/20。
+- 升级 GitHub Actions 基础 actions 到支持 Node 24 runtime 的主版本，消除即将到来的 runner runtime 弃用风险。
 
 ## [1.0.6] - 2026-05-30
 
