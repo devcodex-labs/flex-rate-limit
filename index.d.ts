@@ -306,7 +306,7 @@ export class RateLimiter {
   /**
    * 为 Web 框架创建中间件
    * @param options - 中间件选项
-   * @returns Express/Koa 中间件函数
+   * @returns Express-style `(req, res, next)` 中间件函数；Koa/Egg.js/Fastify/Hapi 请用 check() 包装到对应框架适配器
    */
   middleware(options?: MiddlewareOptions): (req: any, res: any, next?: Function) => Promise<void>;
 }

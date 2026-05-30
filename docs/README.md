@@ -1,10 +1,11 @@
 # 📚 flex-rate-limit 文档中心
 
 > **项目**: flex-rate-limit
-> **版本**: 1.0.5
+> **版本**: 1.0.6
 > **运行时**: Node.js >= 14
 > **仓库**: https://github.com/vextjs/flex-rate-limit
-> **更新**: 2026-05-29
+> **Website**: https://vextjs.github.io/flex-rate-limit
+> **更新**: 2026-05-30
 
 ---
 
@@ -15,7 +16,7 @@
 从这里开始，快速上手限流功能：
 
 1. **[快速开始](getting-started/quickstart.md)** ⭐
-   5分钟上手所有主流框架（Express、Koa、Egg.js、Hapi、Fastify）
+   5分钟上手核心 API，并了解 Express、Koa、Egg.js、Hapi、Fastify 的接入方式
    
 2. **[配置详解](guides/config.md)**
    了解所有配置选项和推荐配置
@@ -295,15 +296,15 @@ whitelist-ratelimit-config-scenarios.md → whitelist-ratelimit-independence.md
 
 **你会学到**：
 - ✅ Memory 和 Redis 的对比
-- ✅ 性能数据（具体的QPS和延迟）
+- ✅ 性能参考维度（正式 QPS/延迟需以可复现 benchmark 为准）
 - ✅ 选择决策树
 - ✅ 4个具体场景选择
 
 **关键概念**：
 - 单服务器 vs 多服务器
-- Memory: 500,000+ QPS
-- Redis: 100,000+ QPS
-- Redis集群配置
+- Memory: 本地内存路径，通常吞吐最高
+- Redis: 分布式路径，受网络与 Redis 命令策略影响
+- Redis集群配置与热点 key 风险
 
 ---
 
@@ -379,14 +380,14 @@ A: 按用户+路由限流，每个用户在每个接口独立限额，详见 [gu
 
 - 💬 [GitHub Issues](https://github.com/vextjs/flex-rate-limit/issues)
 - 💡 [GitHub Discussions](https://github.com/vextjs/flex-rate-limit/discussions)
-- 📖 [示例代码](../examples/)
+- 📖 [示例代码](https://github.com/vextjs/flex-rate-limit/tree/main/examples)
 
 ---
 
 ## 🎉 快速链接
 
-- 📖 [项目首页](../README.md)
-- 💻 [示例代码](../examples/)
+- 📖 [项目首页](https://github.com/vextjs/flex-rate-limit#readme)
+- 💻 [示例代码](https://github.com/vextjs/flex-rate-limit/tree/main/examples)
 - 📦 [npm 包](https://www.npmjs.com/package/flex-rate-limit)
 - 🐛 [报告问题](https://github.com/vextjs/flex-rate-limit/issues)
 

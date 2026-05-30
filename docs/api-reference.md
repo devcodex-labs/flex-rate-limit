@@ -45,7 +45,7 @@ const result = await limiter.check('user-123', { route: '/api/data' });
 
 #### middleware()
 
-创建中间件函数。
+创建 Express 风格的 `(req, res, next)` 中间件函数。Koa、Egg.js、Fastify、Hapi 等框架建议使用 `check()` 按各自的请求/响应语义封装适配器。
 
 ```javascript
 const middleware = limiter.middleware();
@@ -53,8 +53,8 @@ const middleware = limiter.middleware();
 // Express
 app.use(middleware);
 
-// Koa
-app.use(middleware);
+// Koa / Egg.js / Fastify / Hapi
+// 使用 limiter.check(key, { route }) 在框架中间件、hook 或 pre-handler 中封装
 ```
 
 #### reset(key)

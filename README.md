@@ -8,13 +8,13 @@
 
 ## ✨ 特性
 
-- 🚀 **框架无关** - 支持 Express、Koa、Egg.js、Hapi、Fastify 等所有主流框架
+- 🚀 **框架无关核心** - `check()` 可接入 Express、Koa、Egg.js、Hapi、Fastify 等主流框架
 - 🎯 **多种算法** - 滑动窗口、令牌桶、漏桶、固定窗口
 - 💾 **多种存储后端** - 内存、Redis、自定义适配器
 - 🔧 **高度可配置** - 根据需求微调速率限制
 - 🌐 **分布式就绪** - 内置 Redis 支持分布式系统
-- 📊 **详细指标** - 跟踪速率限制命中、重置和剩余配额
-- 🛡️ **生产就绪** - 经过实战检验，具有全面的测试覆盖
+- 📊 **标准响应信息** - 返回限制上限、当前计数、剩余额度、重置时间和重试时间
+- 🛡️ **生产可用** - 提供单元/集成测试，并支持 Redis 分布式部署
 - 💡 **简单 API** - 易于集成，直观易用
 
 ## 📦 安装
@@ -40,10 +40,10 @@ const limiter = new RateLimiter({
   max: 100, // 最多100个请求
 });
 
-// 使用中间件（Express/Koa/Egg.js 等）
+// Express 风格中间件
 app.use(limiter.middleware());
 
-// 或者手动检查
+// 其他框架可使用 check() 按框架语义封装
 const result = await limiter.check('user-123');
 if (!result.allowed) {
   return res.status(429).json({ error: '请求过于频繁' });
@@ -91,6 +91,13 @@ app.listen(3000);
 ## 📚 文档
 
 👉 **[📚 完整文档导航](docs/README.md)** - 查看所有文档、学习路径、场景查找
+
+Website 站点基于 Rspress 构建，内容源复用 `docs/`：
+
+```bash
+npm run docs:dev
+npm run docs:build
+```
 
 ### 快速入口
 

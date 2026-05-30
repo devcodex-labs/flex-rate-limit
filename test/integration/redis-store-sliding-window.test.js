@@ -59,10 +59,15 @@ class MockRedisClient {
 
   zadd(key, score, member) {
     const entries = this.sortedSets.get(key) || [];
-    entries.push({ member, score: Number(score) });
+    const existing = entries.find((entry) => entry.member === member);
+    if (existing) {
+      existing.score = Number(score);
+    } else {
+      entries.push({ member, score: Number(score) });
+    }
     entries.sort((left, right) => left.score - right.score);
     this.sortedSets.set(key, entries);
-    return Promise.resolve(1);
+    return Promise.resolve(existing ? 0 : 1);
   }
 
   zcard(key) {
@@ -149,6 +154,20 @@ describe('RedisStore sliding window integration', () => {
     const entries = client.sortedSets.get('rl:redis-user:scores');
     expect(entries).to.have.length(1);
     expect(entries[0].score).to.equal(1001);
+  });
+
+  it('should create unique sorted set members across store instances in the same millisecond', async () => {
+    const client = new MockRedisClient();
+    const firstStore = new RedisStore({ client });
+    const secondStore = new RedisStore({ client });
+
+    const first = await firstStore.checkSlidingWindow('redis-user', { windowMs: 60000, now: 1000 });
+    const second = await secondStore.checkSlidingWindow('redis-user', { windowMs: 60000, now: 1000 });
+
+    const entries = client.sortedSets.get('rl:redis-user:scores');
+    expect(first.member).to.not.equal(second.member);
+    expect(entries).to.have.length(2);
+    expect(second.count).to.equal(2);
   });
 
   it('should preserve Redis member metadata through RateLimiter rollback', async () => {

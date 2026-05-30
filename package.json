@@ -1,6 +1,6 @@
 {
   "name": "flex-rate-limit",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Universal rate limiting module for Node.js - supports any framework, multiple storage backends, flexible algorithms",
   "main": "lib/index.js",
   "types": "index.d.ts",
@@ -47,7 +47,7 @@
   "bugs": {
     "url": "https://github.com/vextjs/flex-rate-limit/issues"
   },
-  "homepage": "https://github.com/vextjs/flex-rate-limit#readme",
+  "homepage": "https://vextjs.github.io/flex-rate-limit",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -59,6 +59,10 @@
     "coverage": "nyc --reporter=text --reporter=lcov --reporter=html npm test",
     "lint": "eslint lib/**/*.js test/**/*.js",
     "lint:fix": "eslint lib/**/*.js test/**/*.js --fix",
+    "docs:dev": "npm --prefix website run dev",
+    "docs:build": "npm --prefix website run build",
+    "docs:preview": "npm --prefix website run preview",
+    "benchmark:memory": "node scripts/benchmark-memory.js",
     "example:express": "node examples/express-example.js",
     "example:koa": "node examples/koa-example.js",
     "example:egg": "node examples/egg-example.js",

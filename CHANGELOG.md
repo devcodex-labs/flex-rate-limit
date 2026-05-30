@@ -7,7 +7,13 @@
 
 ## [Unreleased]
 
+## [1.0.6] - 2026-05-30
+
 ### 变更
+- 新增 Rspress website 站点骨架，复用 `docs/` 作为站点内容源，并补充首页与 benchmark 指南。
+- 新增本地 Memory benchmark 脚本，用于生成可复现的性能基线。
+- 修复 Redis 滑动窗口 sorted-set member 在多实例同毫秒写入时可能碰撞的问题，避免计数被覆盖。
+- 修正文档中 Express 风格 middleware、漏桶实现语义与性能数字的过度表述。
 - 移除一次性 review 文档，审查结论改由 DevCodex 报告归档。
 - 修正文档链接、包名、`keyGenerator` 示例和 API 参考，使公开文档与当前实现一致。
 - 对齐 TypeScript `Algorithm` 类型与算法实现返回契约。

@@ -18,11 +18,11 @@
 
 | 框架 | 快速开始文件 | 说明 |
 |------|------------|------|
-| **Express** | [quickstart-express.js](../examples/quickstart-express.js) | 完整的Express路由级限流示例 |
-| **Koa** | [quickstart-koa.js](../examples/quickstart-koa.js) | 完整的Koa路由级限流示例 |
-| **Egg.js** | [quickstart-egg.js](../examples/quickstart-egg.js) | 完整的Egg.js路由级限流示例 |
-| **Hapi** | [quickstart-hapi.js](../examples/quickstart-hapi.js) | 完整的Hapi路由级限流示例 |
-| **独立使用** | [standalone-example.js](../examples/standalone-example.js) | 无框架情况下的使用 |
+| **Express** | [quickstart-express.js](https://github.com/vextjs/flex-rate-limit/blob/main/examples/quickstart-express.js) | 完整的Express路由级限流示例 |
+| **Koa** | [quickstart-koa.js](https://github.com/vextjs/flex-rate-limit/blob/main/examples/quickstart-koa.js) | 完整的Koa路由级限流示例 |
+| **Egg.js** | [quickstart-egg.js](https://github.com/vextjs/flex-rate-limit/blob/main/examples/quickstart-egg.js) | 完整的Egg.js路由级限流示例 |
+| **Hapi** | [quickstart-hapi.js](https://github.com/vextjs/flex-rate-limit/blob/main/examples/quickstart-hapi.js) | 完整的Hapi路由级限流示例 |
+| **独立使用** | [standalone-example.js](https://github.com/vextjs/flex-rate-limit/blob/main/examples/standalone-example.js) | 无框架情况下的使用 |
 
 ## ⚡ 快速示例
 
@@ -68,20 +68,14 @@ const limit = createLimiters();
 ### 第 2 步：在路由中直接使用中间件
 
 ```javascript
-// Express
+// Express（可直接使用 limiter.middleware() 包装出的 req/res/next 中间件）
 app.post('/api/login', limit.strict, controller.login);
 app.get('/api/users', limit.relaxed, controller.list);
 app.post('/api/upload', limit.normal, controller.upload);
 
-// Koa
-router.post('/api/login', limit.strict, controller.login);
-router.get('/api/users', limit.relaxed, controller.list);
-router.post('/api/upload', limit.normal, controller.upload);
-
-// Egg.js
-router.post('/api/login', limit.strict, controller.auth.login);
-router.get('/api/users', limit.relaxed, controller.user.list);
-router.post('/api/upload', limit.normal, controller.file.upload);
+// Koa / Egg.js / Fastify / Hapi
+// 不要直接复用 Express 风格中间件；请参考 examples/quickstart-*.js，
+// 使用 limiter.check(key, { route }) 封装为对应框架的中间件、hook 或 pre-handler。
 ```
 
 **就这么简单！** ✨
@@ -209,7 +203,7 @@ router.post('/api/payment', limit.custom(60 * 60 * 1000, 10), controller.pay);
 ## 🎯 核心优势
 
 ✅ **无需重复配置** - 只在路由中配置，无需 perRoute  
-✅ **所有框架统一** - Express、Koa、Egg.js、Hapi 相同模式  
+✅ **核心 API 统一** - 所有框架都通过 `check()` 获得一致的限流结果；框架接入层按各自中间件语义封装
 ✅ **清晰易维护** - 路由和限流配置在一起  
 ✅ **开箱即用** - 复制示例代码直接使用  
 
