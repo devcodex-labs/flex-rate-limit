@@ -1,61 +1,65 @@
 # flex-rate-limit
 
-> Node.js 通用速率限制模块 - 框架无关、灵活且生产就绪
+> A framework-agnostic Node.js rate limiting library with multiple algorithms, Memory / Redis / cache-hub backed storage, and Express-style middleware.
 
 [![npm version](https://img.shields.io/npm/v/flex-rate-limit.svg)](https://www.npmjs.com/package/flex-rate-limit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/node/v/flex-rate-limit.svg)](https://nodejs.org)
 
-## ✨ 特性
+## Why Use It
 
-- 🚀 **框架无关核心** - `check()` 可接入 Express、Koa、Egg.js、Hapi、Fastify 等主流框架
-- 🎯 **多种算法** - 滑动窗口、令牌桶、漏桶、固定窗口
-- 💾 **多种存储后端** - 内存、Redis、CacheHubStore、自定义适配器
-- 🔧 **高度可配置** - 根据需求微调速率限制
-- 🌐 **分布式就绪** - 内置 Redis 支持分布式系统
-- 📊 **标准响应信息** - 返回限制上限、当前计数、剩余额度、重置时间和重试时间
-- 🛡️ **生产可用** - 提供单元/集成测试，并支持 Redis 分布式部署
-- 💡 **简单 API** - 易于集成，直观易用
+- **Framework-agnostic core**: call `check()` from Express, Koa, Egg.js, Hapi, Fastify, workers, queues, or any custom adapter.
+- **Express-style middleware**: use `limiter.middleware()` directly in Express-compatible stacks.
+- **Four algorithms**: sliding window, fixed window, token bucket, and leaky bucket.
+- **Multiple stores**: in-memory storage, Redis storage, `CacheHubStore`, or your own store adapter.
+- **Distributed-ready options**: use Redis or cache-hub Redis atomic backends when counters must be shared across instances.
+- **Standard metadata**: each check returns `allowed`, `limit`, `current`, `remaining`, `resetTime`, and `retryAfter`.
+- **Type definitions included**: CommonJS, ESM, and TypeScript consumers are supported.
 
-## 📦 安装
+## Requirements
+
+- Node.js `>=18.0.0`
+- npm, pnpm, or another package manager compatible with the npm registry
+- Redis is optional and only needed for Redis-backed distributed rate limiting
+
+## Installation
 
 ```bash
 npm install flex-rate-limit
 ```
 
-Redis 支持：
+Redis-backed usage:
+
 ```bash
 npm install flex-rate-limit ioredis
 ```
 
-cache-hub 原子后端支持：
+cache-hub atomic backend usage:
+
 ```bash
 npm install flex-rate-limit cache-hub ioredis
 ```
 
-## 🚀 快速开始
+## Quick Start
 
-### 最简单的例子
+### Direct `check()`
 
 ```javascript
 const { RateLimiter } = require('flex-rate-limit');
 
 const limiter = new RateLimiter({
-  windowMs: 15 * 60 * 1000, // 15分钟
-  max: 100, // 最多100个请求
+  windowMs: 15 * 60 * 1000,
+  max: 100,
 });
 
-// Express 风格中间件
-app.use(limiter.middleware());
+const result = await limiter.check('user:123');
 
-// 其他框架可使用 check() 按框架语义封装
-const result = await limiter.check('user-123');
 if (!result.allowed) {
-  return res.status(429).json({ error: '请求过于频繁' });
+  console.log(`Retry after ${result.retryAfter} ms`);
 }
 ```
 
-### Express 示例
+### Express Middleware
 
 ```javascript
 const express = require('express');
@@ -63,45 +67,94 @@ const { RateLimiter } = require('flex-rate-limit');
 
 const app = express();
 
-// 全局限流：每15分钟100个请求
 const globalLimiter = new RateLimiter({
   windowMs: 15 * 60 * 1000,
   max: 100,
 });
+
 app.use(globalLimiter.middleware());
 
-// 路由级限流：登录接口每15分钟5次
 const loginLimiter = new RateLimiter({
   windowMs: 15 * 60 * 1000,
   max: 5,
 });
-app.post('/api/login', loginLimiter.middleware(), (req, res) => {
-  res.json({ message: '登录成功' });
+
+app.post('/api/login', loginLimiter.middleware(), (_req, res) => {
+  res.json({ message: 'login accepted' });
 });
 
 app.listen(3000);
 ```
 
-### 其他框架
+### Koa, Egg.js, Hapi, Fastify, and Other Frameworks
 
-支持所有主流 Node.js 框架：
+Use `check()` and map the result to the framework's own middleware, hook, or pre-handler shape:
 
-- **Koa** - 异步中间件模式
-- **Egg.js** - 中间件工厂模式
-- **Hapi** - 预检查函数模式
-- **Fastify** - 钩子函数模式
+```javascript
+const { RateLimiter } = require('flex-rate-limit');
 
-查看完整的框架集成示例：[docs/getting-started/quickstart.md](docs/getting-started/quickstart.md)
+const limiter = new RateLimiter({
+  windowMs: 60 * 1000,
+  max: 60,
+});
 
-### CacheHubStore 原子后端
+async function guard(ctx, next) {
+  const key = `user:${ctx.user?.id || ctx.ip}:${ctx.path}`;
+  const result = await limiter.check(key, { route: ctx.path });
 
-`CacheHubStore` 让 flex-rate-limit 保持算法与中间件层，同时把高并发状态更新委托给 `cache-hub` 的原子后端：
+  if (!result.allowed) {
+    ctx.status = 429;
+    ctx.body = { error: 'Too Many Requests', retryAfter: result.retryAfter };
+    return;
+  }
+
+  await next();
+}
+```
+
+See the runnable framework examples in [`examples/`](examples/) and the quickstart guide in [`docs/getting-started/quickstart.md`](docs/getting-started/quickstart.md).
+
+## Storage Backends
+
+### Memory Store
+
+The default store is fast and simple. Use it for single-process services, local development, tests, and cases where counters do not need to be shared across instances.
+
+```javascript
+const limiter = new RateLimiter({
+  windowMs: 60 * 1000,
+  max: 100,
+  store: 'memory',
+});
+```
+
+### RedisStore
+
+Use `RedisStore` when multiple application instances must share counters.
+
+```javascript
+const Redis = require('ioredis');
+const { RateLimiter, RedisStore } = require('flex-rate-limit');
+
+const redis = new Redis(process.env.REDIS_URL || 'redis://127.0.0.1:6379');
+
+const limiter = new RateLimiter({
+  windowMs: 60 * 1000,
+  max: 100,
+  store: new RedisStore({ client: redis, prefix: 'rl:' }),
+});
+```
+
+### CacheHubStore
+
+`CacheHubStore` keeps `flex-rate-limit` as the algorithm and middleware layer while delegating high-concurrency state updates to `cache-hub` atomic primitives. Pass a Redis client for distributed production usage; omit the client only when an in-memory cache-hub backend is acceptable.
 
 ```javascript
 const Redis = require('ioredis');
 const { RateLimiter, CacheHubStore } = require('flex-rate-limit');
 
-const redis = new Redis('redis://localhost:6379');
+const redis = new Redis(process.env.REDIS_URL || 'redis://127.0.0.1:6379');
+
 const limiter = new RateLimiter({
   algorithm: 'sliding-window',
   windowMs: 60 * 1000,
@@ -110,210 +163,32 @@ const limiter = new RateLimiter({
 });
 ```
 
-如果不传 `client`，`CacheHubStore` 会使用 `cache-hub` 的内存原子后端。生产分布式场景建议传入 Redis client。
+Read more in the [storage guide](docs/guides/storage.md).
 
-## 📚 文档
+## Algorithms
 
-👉 **[📚 完整文档导航](docs/README.md)** - 查看所有文档、学习路径、场景查找
+| Algorithm | Best For | Notes |
+|-----------|----------|-------|
+| `sliding-window` | Precise rolling limits | Default algorithm; stores more per-key state |
+| `fixed-window` | High-throughput coarse windows | Fast, but requests can cluster around window boundaries |
+| `token-bucket` | Controlled bursts | Allows bursts up to capacity and refills over time |
+| `leaky-bucket` | Smoothing traffic | Drains at a steady rate |
 
-Website 站点基于 Rspress 构建，内容源复用 `docs/`：
+Choose semantics first, then optimize storage and hot paths. See [algorithm comparison](docs/algorithms/comparison.md) and [deep analysis](docs/algorithms/deep-analysis.md).
 
-```bash
-npm run docs:dev
-npm run docs:build
-```
-
-### 快速入口
-
-| 文档 | 说明 | 难度 |
-|------|------|------|
-| [快速开始](docs/getting-started/quickstart.md) | 5分钟上手所有框架 | ⭐ 新手 |
-| [配置详解](docs/guides/config.md) | 完整的配置选项说明 | ⭐⭐ 进阶 |
-| [业务锁指南](docs/guides/business-lock-guide.md) | 用户ID+路由的精细化限流 | ⭐⭐⭐ 进阶 |
-| [算法对比指南](docs/algorithms/comparison.md) | 4种算法对比与选择决策 | ⭐⭐⭐ 进阶 |
-
-### 更多文档
-
-- 📖 [高级用法](docs/guides/advanced.md) - 路由级限制、动态配置等
-- 📖 [存储后端](docs/guides/storage.md) - Memory、Redis、CacheHubStore 选择
-- 📖 [算法深度分析](docs/algorithms/deep-analysis.md) - 源码分析与瞬时超频
-- 📖 [API参考](docs/reference/api-reference.md) - 完整API文档
-
-## 🎯 核心概念
-
-### 业务锁 - 用户级别精细化限流 ⭐⭐⭐
-
-支持基于 **用户ID + 路由** 的限流，每个用户在每个接口独立计数：
+## Common Configuration
 
 ```javascript
-const { RateLimiter } = require('flex-rate-limit');
-
-const limiter = new RateLimiter({
-  windowMs: 15 * 60 * 1000,
-  max: 5,
-  // 核心：从 ctx 中提取用户ID和路由
-  keyGenerator: (ctx) => {
-    const userId = ctx.user?.id || ctx.ip;
-    return `user:${userId}:${ctx.path}`;
-  },
-});
-
-// 使用效果：
-// - 用户A对 /api/login 的限流不影响用户B
-// - 用户A对 /api/login 的限流不影响 /api/posts
-// - 完美适配公司网络、校园网等场景
-```
-
-**使用场景**:
-- ✅ 防止用户恶意刷接口
-- ✅ 公平分配API配额
-- ✅ 公司网络/校园网用户互不影响
-- ✅ 精确控制每个用户的行为
-
-详见：[业务锁完整指南](docs/guides/business-lock-guide.md)
-
-### IP 白名单与访问控制 ⭐⭐
-
-支持 **IP 白名单/黑名单**，可指定路由只允许特定 IP 访问：
-
-```javascript
-const { RateLimiter } = require('flex-rate-limit');
-
-// 示例 1: 简单白名单 - 跳过限流
 const limiter = new RateLimiter({
   windowMs: 60 * 1000,
   max: 100,
-  skip: (req) => ['127.0.0.1', '192.168.1.100'].includes(req.ip),
-});
-
-// 示例 2: 管理接口 - 只允许特定 IP 访问（403 拒绝）
-const adminLimiter = new RateLimiter({
-  skip: (req) => !['192.168.1.10', '192.168.1.11'].includes(req.ip),
+  algorithm: 'sliding-window',
+  headers: true,
+  keyGenerator: (req) => `user:${req.user?.id || req.ip}:${req.path}`,
+  skip: (req) => req.path === '/health',
   handler: (req, res) => {
-    res.status(403).json({ error: '只有授权 IP 可以访问' });
+    res.status(429).json({ error: 'Too Many Requests' });
   },
-});
-app.use('/api/admin', adminLimiter.middleware());
-
-// 示例 3: IP 段白名单（CIDR 支持）
-// 支持 10.0.0.0/8、192.168.0.0/16 等内网 IP 段
-
-// 示例 4: 黑名单 - 限制恶意 IP
-const limiter = new RateLimiter({
-  max: (req) => ['1.2.3.4'].includes(req.ip) ? 1 : 100,
-});
-```
-
-**完整文档**: [高级用法 - IP 白名单章节](docs/guides/advanced.md#ip-白名单与黑名单-)
-
-### 动态 IP 白名单配置 ⭐⭐⭐
-
-支持 **全局 + 路由级 IP 白名单**、**动态配置**和**多种配置方式**：
-
-**配置示例**:
-```javascript
-// 全局白名单（所有路由生效）
-const globalWhitelist = ['127.0.0.1', '192.168.1.100'];
-
-// 路由级白名单（独立配置）
-const routeWhitelists = {
-  '/api/admin': ['192.168.1.10', '192.168.1.11'],
-  '/api/internal': ['10.0.0.0/8', '192.168.0.0/16'],  // 支持 IP 段
-};
-```
-
-**动态管理 API**:
-```bash
-POST /api/whitelist/global/add      # 添加全局白名单
-POST /api/whitelist/global/remove   # 移除全局白名单
-POST /api/whitelist/route/add       # 添加路由白名单
-GET  /api/whitelist/config           # 查看配置
-```
-
-**环境变量配置**（生产环境推荐）:
-```bash
-GLOBAL_IP_WHITELIST=127.0.0.1,192.168.1.1 \
-ADMIN_IP_WHITELIST=192.168.1.10,192.168.1.11 \
-node app.js
-```
-
-**完整示例**:
-- Express: `express-ip-whitelist-independent.js` ⭐（推荐：独立版本）
-- Koa: `koa-ip-whitelist-independent.js` ⭐
-- Egg.js: `egg-ip-whitelist-advanced.js`
-
-**⚠️ 重要说明 - 白名单与限流的关系**:
-
-有两种实现方式，根据你的需求选择：
-
-| 实现方式 | 白名单 IP 是否限流 | 适用场景 | 示例文件 |
-|---------|-------------------|---------|---------|
-| **耦合版本** | ❌ 不限流（跳过） | 白名单 = 特权用户 | `express-ip-whitelist-advanced.js` |
-| **独立版本** ⭐ | ✅ 限流（独立） | 白名单 = 访问控制 | `express-ip-whitelist-independent.js` |
-
-**独立版本示例**（推荐）:
-```javascript
-// 白名单和限流完全独立
-app.get('/api/admin/users',
-  ipWhitelistMiddleware('/api/admin'),  // 第一层：白名单验证（403）
-  createRateLimiter({ max: 200 }),      // 第二层：限流控制（429）
-  handler
-);
-
-// 效果：
-// - 非白名单 IP → 403 Forbidden（立即拒绝）
-// - 白名单 IP → 继续到限流检查
-//   - 未超限 → 200 OK
-//   - 超限 → 429 Too Many Requests
-```
-
-**详细说明**: [白名单与限流独立性文档](docs/whitelist-ratelimit-independence.md)
-
-**配置文件**: `config/ip-whitelist.json`
-
----
-
-### ⚠️ 重要：配置场景说明
-
-在使用 IP 白名单功能前，请了解以下配置场景：
-
-| 配置情况 | 处理结果 | 说明 |
-|---------|---------|------|
-| **只配置限流** | 所有 IP 可访问 + 限流 | 未配置白名单 = 允许所有 |
-| **只配置白名单** | 白名单 IP 无限制访问 | ⚠️ 不推荐（无限流保护）|
-| **白名单 + 限流** | 白名单验证 → 限流检查 | ✅ 最推荐（双重保护）|
-| **全局白名单** | 所有路由通用 + 各自限流 | ✅ 适合办公室网络 |
-
-**关键要点**：
-1. ✅ 未配置白名单 = 允许所有 IP（不是拒绝所有）
-2. ✅ 白名单 IP 也会被限流（独立版本）
-3. ✅ 全局白名单优先级更高（但仍需限流）
-4. ✅ 推荐配置：白名单 + 限流一起使用
-
-**详细配置场景**: [配置场景完整文档](docs/whitelist-ratelimit-config-scenarios.md)
-
----
-
-### 预定义限制级别
-
-根据不同场景快速配置限流级别：
-
-```javascript
-const limit = {
-  strict: 5,      // 15分钟5次（登录、注册等敏感操作）
-  normal: 50,     // 1小时50次（数据修改等）
-  relaxed: 200,   // 1分钟200次（数据查询等）
-};
-
-// 使用示例
-app.post('/api/login', limiter.middleware({ max: limit.strict }), handler);
-app.get('/api/data', limiter.middleware({ max: limit.relaxed }), handler);
-```
-
-### 路由级配置
-
-```javascript
-const limiter = new RateLimiter({
   perRoute: {
     '/api/login': { max: 5, windowMs: 15 * 60 * 1000 },
     '/api/users': { max: 100, windowMs: 60 * 1000 },
@@ -321,86 +196,114 @@ const limiter = new RateLimiter({
 });
 ```
 
-### 支持所有框架
+| Option | Default | Description |
+|--------|---------|-------------|
+| `windowMs` | `60000` | Time window in milliseconds |
+| `max` | `100` | Max requests per window; may be a function |
+| `algorithm` | `sliding-window` | One of the four supported algorithms |
+| `store` | `memory` | Store instance or `'memory'` |
+| `keyGenerator` | IP-based | Builds the rate-limit key from request context |
+| `skip` | `() => false` | Return `true` to bypass rate limiting |
+| `handler` | built-in 429 response | Custom over-limit handler |
+| `headers` | `true` | Write `X-RateLimit-*` and `Retry-After` headers |
+| `perRoute` | `null` | Route-specific overrides |
+| `skipSuccessfulRequests` | `false` | Roll back successful responses |
+| `skipFailedRequests` | `false` | Roll back failed responses |
+
+Full details are in the [configuration guide](docs/guides/config.md) and [API reference](docs/reference/api-reference.md).
+
+## Result Shape
 
 ```javascript
-// Express
-app.post('/api/login', limit.strict, controller.login);
-
-// Koa
-router.post('/api/login', limit.strict, controller.login);
-
-// Egg.js
-router.post('/api/login', limit.strict, controller.auth.login);
+{
+  allowed: true,
+  limit: 100,
+  current: 1,
+  remaining: 99,
+  resetTime: 1767225600000,
+  retryAfter: 0
+}
 ```
 
-## 📝 示例文件
+## Benchmarks
 
-查看 `examples/` 目录获取完整的可运行示例：
+The repository includes reproducible local benchmark scripts for Memory direct checks, Redis direct checks, and HTTP middleware scenarios.
 
-### 按框架分类
-
-- **Express**: 
-  - `quickstart-express.js` - 快速开始
-  - `express-router-example.js` - 路由级限流
-  - `express-ip-whitelist-independent.js` ⭐ - IP白名单（独立版本，推荐）
-  - `express-ip-whitelist-advanced.js` - IP白名单（耦合版本）
-
-- **Koa**: 
-  - `quickstart-koa.js` - 快速开始
-  - `koa-router-example.js` - 路由级限流
-  - `koa-ip-whitelist-independent.js` ⭐ - IP白名单（独立版本）
-  
-- **Egg.js**: 
-  - `quickstart-egg.js` - 快速开始
-  - `egg-router-example.js` - 路由级限流
-  - `egg-business-lock-example.js` ⭐ - 业务锁（用户+路由）
-  - `egg-ip-whitelist-advanced.js` - IP白名单
-
-- **其他框架**:
-  - Hapi: `quickstart-hapi.js`, `hapi-example.js`
-  - Fastify: `quickstart-fastify.js`, `fastify-router-example.js`
-
-### 按功能分类
-
-- 🚀 **快速开始**: `quickstart-*.js`
-- 🔒 **IP 白名单**: `*-ip-whitelist-*.js` （推荐使用 `independent` 版本）
-- 👤 **业务锁**: `egg-business-lock-example.js`
-- 🔧 **独立使用**: `standalone-example.js`
-
-## 🧪 测试
+Run these from a cloned repository after installing development dependencies:
 
 ```bash
-# 运行所有测试
+npm install
+npm run benchmark:memory
+npm run benchmark:redis
+npm run benchmark:http
+```
+
+The npm runtime package does not require benchmark dependencies. Redis and HTTP benchmark output records the Node.js version, Redis URL, key distribution, concurrency, and other parameters. Use `BENCH_JSON=1` when you need machine-readable output.
+
+See [Benchmark and Performance](docs/benchmark.md) for commands, environment variables, and interpretation notes.
+
+## Documentation
+
+| Entry | Description |
+|-------|-------------|
+| [Documentation index](docs/README.md) | Full documentation navigation |
+| [Quickstart](docs/getting-started/quickstart.md) | First integration path and framework examples |
+| [Configuration](docs/guides/config.md) | Complete option reference and practical presets |
+| [Storage](docs/guides/storage.md) | Memory, Redis, and CacheHubStore selection |
+| [Business lock guide](docs/guides/business-lock-guide.md) | User + route scoped rate limiting |
+| [Algorithm comparison](docs/algorithms/comparison.md) | Choosing the right algorithm |
+| [API reference](docs/reference/api-reference.md) | Classes, options, stores, and exports |
+| [Benchmark guide](docs/benchmark.md) | Local benchmark commands and caveats |
+
+The website is built with Rspress and reuses the `docs/` directory:
+
+```bash
+npm run docs:dev
+npm run docs:build
+```
+
+## Examples
+
+Runnable examples are available in [`examples/`](examples/):
+
+| Category | Files |
+|----------|-------|
+| Quickstart | `quickstart-express.js`, `quickstart-koa.js`, `quickstart-egg.js`, `quickstart-hapi.js`, `quickstart-fastify.js` |
+| Router examples | `express-router-example.js`, `koa-router-example.js`, `egg-router-example.js`, `fastify-router-example.js` |
+| IP whitelist examples | `express-ip-whitelist-independent.js`, `koa-ip-whitelist-independent.js`, `ip-whitelist-example.js` |
+| Standalone usage | `standalone-example.js` |
+| Business lock | `egg-business-lock-example.js` |
+
+## Development
+
+```bash
 npm test
-
-# 仅运行单元测试
 npm run test:unit
-
-# 运行集成测试
 npm run test:integration
-
-# 生成覆盖率报告
+npm run typecheck
+npm run lint
 npm run coverage
 ```
 
-## 🔗 相关项目
+## Troubleshooting
 
-- [monSQLize](https://github.com/vextjs/monSQLize) - 带缓存的 MongoDB ORM
-- [schema-dsl](https://github.com/vextjs/schema-dsl) - JSON Schema 验证
-- [jrpc](https://github.com/vextjs/jrpc) - JSON-RPC 2.0 实现
+- **Counters are not shared across instances**: use `RedisStore` or `CacheHubStore` with a Redis client instead of the default Memory store.
+- **Redis benchmarks are skipped**: start Redis locally or set `REDIS_URL` / `BENCH_REDIS_URL`.
+- **Package installs but Redis code fails at runtime**: install and configure a Redis client such as `ioredis`.
+- **Koa/Fastify/Hapi integration feels awkward**: call `check()` directly and wrap the result in the framework's native middleware or hook style.
+- **Benchmark numbers differ from the docs or CI**: local CPU, Node.js version, Redis latency, key distribution, and HTTP app work all affect throughput.
 
-## 💬 支持
+## Related Projects
 
-- 📫 问题：[GitHub Issues](https://github.com/vextjs/flex-rate-limit/issues)
-- 💡 功能请求：[GitHub Discussions](https://github.com/vextjs/flex-rate-limit/discussions)
+- [monSQLize](https://github.com/vextjs/monSQLize) - MongoDB ORM with caching
+- [schema-dsl](https://github.com/vextjs/schema-dsl) - JSON Schema validation
+- [jrpc](https://github.com/vextjs/jrpc) - JSON-RPC 2.0 implementation
 
-## 📄 许可证
+## Support
+
+- [GitHub Issues](https://github.com/vextjs/flex-rate-limit/issues)
+- [GitHub Discussions](https://github.com/vextjs/flex-rate-limit/discussions)
+
+## License
 
 [MIT](LICENSE)
-
----
-
-由 vext.js 团队用 ❤️ 制作
-
-

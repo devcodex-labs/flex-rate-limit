@@ -1,8 +1,8 @@
 # 📚 flex-rate-limit 文档中心
 
 > **项目**: flex-rate-limit
-> **版本**: 2.1.0
-> **运行时**: Node.js >= 18
+> **版本**: 2.2.0
+> **运行时**: Node.js >= 18.0.0
 > **仓库**: https://github.com/vextjs/flex-rate-limit
 > **Website**: https://vextjs.github.io/flex-rate-limit
 > **更新**: 2026-06-01
@@ -36,13 +36,16 @@
 5. **[存储后端](guides/storage.md)**
    Memory vs Redis vs CacheHubStore，性能对比与选择决策
 
-6. **[IP 白名单配置场景](whitelist-ratelimit-config-scenarios.md)** ⭐ 新增
+6. **[Benchmark and Performance](benchmark.md)**
+   Memory、Redis direct、HTTP middleware 本地基准测试命令
+
+7. **[IP 白名单配置场景](whitelist-ratelimit-config-scenarios.md)** ⭐ 新增
    四个核心配置场景详解（必读）
 
-7. **[白名单与限流独立性](whitelist-ratelimit-independence.md)** ⭐ 新增
+8. **[白名单与限流独立性](whitelist-ratelimit-independence.md)** ⭐ 新增
    耦合版本 vs 独立版本对比说明
 
-8. **[IP 白名单动态配置](ip-whitelist-dynamic-config.md)**
+9. **[IP 白名单动态配置](ip-whitelist-dynamic-config.md)**
    快速使用指南和配置方式
 
 ---
@@ -51,10 +54,10 @@
 
 深入理解限流算法：
 
-6. **[算法对比指南](algorithms/comparison.md)** ⭐
+10. **[算法对比指南](algorithms/comparison.md)** ⭐
    4种算法对比、选择决策、配置示例
    
-7. **[算法深度分析](algorithms/deep-analysis.md)**
+11. **[算法深度分析](algorithms/deep-analysis.md)**
    源码级分析、瞬时超频计算、性能数据
 
 ---
@@ -63,7 +66,7 @@
 
 快速查询API：
 
-8. **[API参考](reference/api-reference.md)**
+12. **[API参考](reference/api-reference.md)**
    完整的类、方法、参数文档
 
 ---
@@ -217,7 +220,9 @@ whitelist-ratelimit-config-scenarios.md → whitelist-ratelimit-independence.md
 → [algorithms/comparison.md](algorithms/comparison.md) - 选择决策树
 
 ### 我想优化性能
-→ [algorithms/deep-analysis.md](algorithms/deep-analysis.md) - 性能对比
+→ [benchmark.md](benchmark.md) - 可复现 benchmark 命令
+
+→ [algorithms/deep-analysis.md](algorithms/deep-analysis.md) - 算法层性能对比
 
 ### 我想了解所有配置选项
 → [guides/config.md](guides/config.md) - 完整配置说明

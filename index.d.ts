@@ -1,4 +1,4 @@
-// Type definitions for flex-rate-limit v2.1.0
+// Type definitions for flex-rate-limit v2.2.0
 // Project: https://github.com/vextjs/flex-rate-limit
 // Definitions by: vext.js Team
 
@@ -156,6 +156,7 @@ export interface Store {
   set(key: string, value: any, ttl?: number): Promise<void>;
   increment(key: string, options?: any): Promise<{ count: number; resetTime: number }>;
   decrement?(key: string): Promise<void>;
+  checkFixedWindow?(key: string, options?: any): Promise<RateLimitResult & { rollbackData?: any }>;
   checkSlidingWindow?(key: string, options?: any): Promise<{ count: number; resetTime: number; rollbackData?: any }>;
   rollbackSlidingWindow?(key: string, rollbackData?: any): Promise<void>;
   checkTokenBucket?(key: string, options?: any): Promise<RateLimitResult & { rollbackData?: any }>;
@@ -383,6 +384,7 @@ export class CacheHubStore implements Store {
   set(key: string, value: any, ttl?: number): Promise<void>;
   increment(key: string, options?: any): Promise<{ count: number; resetTime: number }>;
   decrement(key: string): Promise<void>;
+  checkFixedWindow(key: string, options?: any): Promise<RateLimitResult & { rollbackData?: any }>;
   checkSlidingWindow(key: string, options?: any): Promise<{ count: number; resetTime: number; rollbackData?: any }>;
   rollbackSlidingWindow(key: string, rollbackData?: any): Promise<void>;
   checkTokenBucket(key: string, options?: any): Promise<RateLimitResult & { rollbackData?: any }>;

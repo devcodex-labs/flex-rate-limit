@@ -68,7 +68,7 @@ export default defineConfig({
         activeMatch: "/benchmark",
       },
       {
-        text: "v2.1.0",
+        text: "v2.2.0",
         items: [
           {
             text: "Changelog",

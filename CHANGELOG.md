@@ -7,6 +7,24 @@
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-06-01
+
+### Added
+- Added reproducible Redis direct benchmark coverage for `RedisStore`, `CacheHubStore`, and `rate-limiter-flexible`.
+- Added reproducible HTTP middleware benchmark coverage for `flex-memory`, `flex-redis`, `flex-cache-hub`, and `rate-limiter-flexible`.
+- Added benchmark documentation for Memory, Redis direct, and HTTP middleware scenarios.
+
+### Changed
+- Rewrote the root `README.md` as the English default package entry.
+- Optimized the static middleware hot path by avoiding unnecessary runtime resolution, promise wrapping, and rollback metadata when rollback is disabled.
+- Added a `CacheHubStore` fixed-window fast path backed by cache-hub atomic primitives.
+- Updated release, website, docs navigation, and Profile version metadata for `2.2.0`.
+
+### Compatibility
+- Public APIs remain compatible with `2.1.x`.
+- Node.js support remains `>=18.0.0`.
+- `cache-hub` remains optional; existing Memory and RedisStore users do not need to change code.
+
 ## [2.1.0] - 2026-06-01
 
 ### Added

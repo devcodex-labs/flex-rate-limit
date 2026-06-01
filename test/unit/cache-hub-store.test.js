@@ -30,6 +30,28 @@ describe('CacheHubStore', () => {
     expect((await limiter.check('fixed-user')).allowed).to.be.true;
   });
 
+  it('should rollback fixed-window counts after successful middleware requests', async () => {
+    const store = new CacheHubStore();
+    const limiter = new RateLimiter({
+      algorithm: 'fixed-window',
+      windowMs: 60000,
+      max: 1,
+      skipSuccessfulRequests: true,
+      store,
+    });
+    const middleware = limiter.middleware();
+    const req = { ip: '127.0.0.1', path: '/ok' };
+    const res = createMockResponse();
+
+    await middleware(req, res, () => {});
+    res.emit('finish');
+    await new Promise((resolve) => setImmediate(resolve));
+
+    const result = await limiter.check('127.0.0.1', { req });
+    expect(result.allowed).to.be.true;
+    expect(result.current).to.equal(1);
+  });
+
   it('should enforce sliding-window limits and rollback successful middleware requests', async () => {
     const store = new CacheHubStore();
     const limiter = new RateLimiter({
@@ -115,4 +137,3 @@ describe('CacheHubStore', () => {
     expect(await store.get('two')).to.be.undefined;
   });
 });
-

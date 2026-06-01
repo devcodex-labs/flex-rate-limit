@@ -94,7 +94,7 @@ await limiter.resetAll();
 
 ## Store 接口速查
 
-自定义 Store 至少需要实现 `increment`、`get`、`set` 和 `reset`；`decrement` 用于固定窗口回滚，`resetAll` 用于全量清理。若实现 `checkSlidingWindow`、`checkTokenBucket`、`checkLeakyBucket` 等快路径，算法层会优先使用它们。
+自定义 Store 至少需要实现 `increment`、`get`、`set` 和 `reset`；`decrement` 用于固定窗口回滚，`resetAll` 用于全量清理。若实现 `checkFixedWindow`、`checkSlidingWindow`、`checkTokenBucket`、`checkLeakyBucket` 等快路径，算法层会优先使用它们。
 
 ```typescript
 interface Store {
@@ -102,6 +102,7 @@ interface Store {
   set(key: string, value: any, ttl?: number): Promise<void>;
   increment(key: string, options?: any): Promise<{ count: number; resetTime?: number }>;
   decrement?(key: string): Promise<void>;
+  checkFixedWindow?(key: string, options?: any): Promise<any>;
   checkSlidingWindow?(key: string, options?: any): Promise<any>;
   rollbackSlidingWindow?(key: string, rollbackData?: any): Promise<void>;
   checkTokenBucket?(key: string, options?: any): Promise<any>;
@@ -156,7 +157,7 @@ const { MemoryStore } = require('flex-rate-limit');
 const { CacheHubStore } = require('flex-rate-limit');
 ```
 
-### keyGenerators
+### 预定义键生成器
 
 预定义的键生成器对象。
 
