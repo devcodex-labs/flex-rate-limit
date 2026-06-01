@@ -38,6 +38,20 @@ describe('MemoryStore', () => {
       value = await store.get('ttl-key');
       expect(value).to.be.undefined;
     });
+
+    it('should keep extended TTL values until the new expiry', async function() {
+      this.timeout(5000);
+
+      await store.set('extend-key', { count: 1 }, 50);
+      await new Promise((resolve) => setTimeout(resolve, 25));
+      await store.set('extend-key', { count: 2 }, 120);
+      await new Promise((resolve) => setTimeout(resolve, 50));
+
+      expect(await store.get('extend-key')).to.deep.equal({ count: 2 });
+
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      expect(await store.get('extend-key')).to.be.undefined;
+    });
   });
 
   describe('increment()', () => {
@@ -61,6 +75,18 @@ describe('MemoryStore', () => {
       const data = await store.get('sliding');
       expect(data.requests).to.be.an('array');
       expect(data.requests).to.have.lengthOf(2);
+    });
+
+    it('should rollback a specific sliding window timestamp', () => {
+      const now = Date.now();
+      store.checkSlidingWindow('sliding-rollback', { windowMs: 60000, now });
+      store.checkSlidingWindow('sliding-rollback', { windowMs: 60000, now: now + 1 });
+
+      store.rollbackSlidingWindow('sliding-rollback', { requestTime: now });
+
+      const data = store.store.get('sliding-rollback');
+      expect(data.requests).to.deep.equal([now + 1]);
+      expect(data.head).to.equal(0);
     });
   });
 
