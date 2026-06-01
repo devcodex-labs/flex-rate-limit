@@ -1,4 +1,4 @@
-// Type definitions for flex-rate-limit v1.0.5
+// Type definitions for flex-rate-limit v2.0.2
 // Project: https://github.com/vextjs/flex-rate-limit
 // Definitions by: vext.js Team
 

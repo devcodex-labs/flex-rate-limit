@@ -1,11 +1,11 @@
 # 📚 flex-rate-limit 文档中心
 
 > **项目**: flex-rate-limit
-> **版本**: 2.0.1
+> **版本**: 2.0.2
 > **运行时**: Node.js >= 18
 > **仓库**: https://github.com/vextjs/flex-rate-limit
 > **Website**: https://vextjs.github.io/flex-rate-limit
-> **更新**: 2026-05-30
+> **更新**: 2026-06-01
 
 ---
 
