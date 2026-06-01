@@ -1,7 +1,7 @@
 # 📚 flex-rate-limit 文档中心
 
 > **项目**: flex-rate-limit
-> **版本**: 2.0.2
+> **版本**: 2.1.0
 > **运行时**: Node.js >= 18
 > **仓库**: https://github.com/vextjs/flex-rate-limit
 > **Website**: https://vextjs.github.io/flex-rate-limit
@@ -34,7 +34,7 @@
    用户ID+路由的精细化限流控制
    
 5. **[存储后端](guides/storage.md)**
-   Memory vs Redis，性能对比与选择决策
+   Memory vs Redis vs CacheHubStore，性能对比与选择决策
 
 6. **[IP 白名单配置场景](whitelist-ratelimit-config-scenarios.md)** ⭐ 新增
    四个核心配置场景详解（必读）
@@ -193,7 +193,7 @@ whitelist-ratelimit-config-scenarios.md → whitelist-ratelimit-independence.md
 → [getting-started/quickstart.md](getting-started/quickstart.md) - 场景1：登录保护
 
 ### 我想用Redis
-→ [guides/storage.md](guides/storage.md) - Redis配置
+→ [guides/storage.md](guides/storage.md) - Redis 与 CacheHubStore 配置
 
 ### 我想按用户限流
 → [guides/business-lock-guide.md](guides/business-lock-guide.md)
@@ -295,7 +295,7 @@ whitelist-ratelimit-config-scenarios.md → whitelist-ratelimit-independence.md
 ### guides/storage.md - 存储后端
 
 **你会学到**：
-- ✅ Memory 和 Redis 的对比
+- ✅ Memory、Redis 和 CacheHubStore 的对比
 - ✅ 性能参考维度（正式 QPS/延迟需以可复现 benchmark 为准）
 - ✅ 选择决策树
 - ✅ 4个具体场景选择
@@ -368,8 +368,8 @@ A: 查看 [algorithms/comparison.md](algorithms/comparison.md) 的选择决策�
 **Q: 登录接口应该怎么配置？**
 A: 推荐 `strict` 级别：15分钟5次，参考 [getting-started/quickstart.md](getting-started/quickstart.md)。
 
-**Q: Memory 和 Redis 如何选择？**
-A: 单服务器用Memory，多服务器用Redis，详见 [guides/storage.md](guides/storage.md)。
+**Q: Memory、Redis 和 CacheHubStore 如何选择？**
+A: 单服务器用 Memory，多服务器可用 Redis；需要复用 `cache-hub` 原子状态后端时使用 CacheHubStore，详见 [guides/storage.md](guides/storage.md)。
 
 **Q: 什么是业务锁？**
 A: 按用户+路由限流，每个用户在每个接口独立限额，详见 [guides/business-lock-guide.md](guides/business-lock-guide.md)。

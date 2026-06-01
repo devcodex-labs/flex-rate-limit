@@ -1,4 +1,4 @@
-// Type definitions for flex-rate-limit v2.0.2
+// Type definitions for flex-rate-limit v2.1.0
 // Project: https://github.com/vextjs/flex-rate-limit
 // Definitions by: vext.js Team
 
@@ -95,12 +95,12 @@ export interface RateLimiterRuleOptions {
   capacity?: number;
 
   /**
-   * 每秒令牌补充率（用于 token-bucket 算法）
+   * 每个 windowMs 内补充的令牌数（用于 token-bucket 算法）
    */
   refillRate?: number;
 
   /**
-   * 每秒泄漏率（用于 leaky-bucket 算法）
+   * 每个 windowMs 内漏出的请求数（用于 leaky-bucket 算法）
    */
   leakRate?: number;
 
@@ -117,7 +117,7 @@ export interface PerRouteOptions extends Partial<RateLimiterRuleOptions> {}
 export interface RateLimiterOptions extends RateLimiterRuleOptions {
   /**
    * 存储后端
-   * - Store 实例：自定义或内置的存储后端（MemoryStore、RedisStore）
+   * - Store 实例：自定义或内置的存储后端（MemoryStore、RedisStore、CacheHubStore）
    * - 'memory'：使用默认内存存储
    * @default 'memory'
    * @example
@@ -128,6 +128,9 @@ export interface RateLimiterOptions extends RateLimiterRuleOptions {
    * // 使用 Redis 存储
    * const redis = new Redis();
    * store: new RedisStore({ client: redis })
+   *
+   * // 使用 cache-hub 原子状态后端
+   * store: new CacheHubStore({ client: redis })
    *
    * // 条件使用（Egg.js 风格）
    * store: ctx.app.redis
@@ -153,6 +156,12 @@ export interface Store {
   set(key: string, value: any, ttl?: number): Promise<void>;
   increment(key: string, options?: any): Promise<{ count: number; resetTime: number }>;
   decrement?(key: string): Promise<void>;
+  checkSlidingWindow?(key: string, options?: any): Promise<{ count: number; resetTime: number; rollbackData?: any }>;
+  rollbackSlidingWindow?(key: string, rollbackData?: any): Promise<void>;
+  checkTokenBucket?(key: string, options?: any): Promise<RateLimitResult & { rollbackData?: any }>;
+  rollbackTokenBucket?(key: string, rollbackData?: any): Promise<void>;
+  checkLeakyBucket?(key: string, options?: any): Promise<RateLimitResult & { rollbackData?: any }>;
+  rollbackLeakyBucket?(key: string, rollbackData?: any): Promise<void>;
   reset(key: string): Promise<void>;
   resetAll?(): Promise<void>;
 }
@@ -205,6 +214,33 @@ export interface RedisStoreOptions {
    * 支持任何实现了基本 Redis 方法的客户端
    */
   client: RedisClient | any;
+
+  /**
+   * 键前缀
+   * @default 'rl:'
+   */
+  prefix?: string;
+
+  /**
+   * 默认过期时间（秒）
+   * @default 3600
+   */
+  expiry?: number;
+}
+
+/**
+ * CacheHub 存储选项
+ */
+export interface CacheHubStoreOptions {
+  /**
+   * Redis 客户端实例；不传时使用 cache-hub 内存后端。
+   */
+  client?: RedisClient | any;
+
+  /**
+   * Redis 客户端别名。
+   */
+  redis?: RedisClient | any;
 
   /**
    * 键前缀
@@ -338,6 +374,26 @@ export class RedisStore implements Store {
   resetAll(): Promise<void>;
 }
 
+/**
+ * cache-hub 原子状态存储后端
+ */
+export class CacheHubStore implements Store {
+  constructor(options?: CacheHubStoreOptions);
+  get(key: string): Promise<any>;
+  set(key: string, value: any, ttl?: number): Promise<void>;
+  increment(key: string, options?: any): Promise<{ count: number; resetTime: number }>;
+  decrement(key: string): Promise<void>;
+  checkSlidingWindow(key: string, options?: any): Promise<{ count: number; resetTime: number; rollbackData?: any }>;
+  rollbackSlidingWindow(key: string, rollbackData?: any): Promise<void>;
+  checkTokenBucket(key: string, options?: any): Promise<RateLimitResult & { rollbackData?: any }>;
+  rollbackTokenBucket(key: string, rollbackData?: any): Promise<void>;
+  checkLeakyBucket(key: string, options?: any): Promise<RateLimitResult & { rollbackData?: any }>;
+  rollbackLeakyBucket(key: string, rollbackData?: any): Promise<void>;
+  reset(key: string): Promise<void>;
+  resetAll(): Promise<void>;
+  close(): Promise<void>;
+}
+
 // ========== 导出的常量 ==========
 
 /**
@@ -364,6 +420,7 @@ declare const _default: {
   RateLimiter: typeof RateLimiter;
   MemoryStore: typeof MemoryStore;
   RedisStore: typeof RedisStore;
+  CacheHubStore: typeof CacheHubStore;
   algorithms: typeof algorithms;
   keyGenerators: typeof keyGenerators;
 };

@@ -80,7 +80,7 @@ await limiter.resetAll();
 | `windowMs` | `number` | `60000` | 时间窗口大小，单位毫秒 |
 | `max` | `number \| function` | `100` | 最大请求数，支持按请求动态计算 |
 | `algorithm` | `'sliding-window' \| 'fixed-window' \| 'token-bucket' \| 'leaky-bucket'` | `'sliding-window'` | 限流算法 |
-| `store` | `Store \| 'memory'` | `'memory'` | 存储后端；Redis 需传入 `new RedisStore({ client })` |
+| `store` | `Store \| 'memory'` | `'memory'` | 存储后端；Redis 可传入 `new RedisStore({ client })`，原子后端可传入 `new CacheHubStore({ client })` |
 | `keyGenerator` | `function` | 按 IP | 生成限流键；预定义生成器通过 `keyGenerators.*` 传入 |
 | `skip` | `function` | `() => false` | 返回 `true` 时跳过限流 |
 | `handler` | `function \| null` | `null` | 超限后的自定义响应处理器 |
@@ -94,7 +94,7 @@ await limiter.resetAll();
 
 ## Store 接口速查
 
-自定义 Store 至少需要实现 `increment`、`get`、`set` 和 `reset`；`decrement` 用于固定窗口回滚，`resetAll` 用于全量清理。
+自定义 Store 至少需要实现 `increment`、`get`、`set` 和 `reset`；`decrement` 用于固定窗口回滚，`resetAll` 用于全量清理。若实现 `checkSlidingWindow`、`checkTokenBucket`、`checkLeakyBucket` 等快路径，算法层会优先使用它们。
 
 ```typescript
 interface Store {
@@ -102,6 +102,12 @@ interface Store {
   set(key: string, value: any, ttl?: number): Promise<void>;
   increment(key: string, options?: any): Promise<{ count: number; resetTime?: number }>;
   decrement?(key: string): Promise<void>;
+  checkSlidingWindow?(key: string, options?: any): Promise<any>;
+  rollbackSlidingWindow?(key: string, rollbackData?: any): Promise<void>;
+  checkTokenBucket?(key: string, options?: any): Promise<any>;
+  rollbackTokenBucket?(key: string, rollbackData?: any): Promise<void>;
+  checkLeakyBucket?(key: string, options?: any): Promise<any>;
+  rollbackLeakyBucket?(key: string, rollbackData?: any): Promise<void>;
   reset(key: string): Promise<void>;
   resetAll?(): Promise<void>;
 }
@@ -140,6 +146,14 @@ const { RedisStore } = require('flex-rate-limit');
 
 ```javascript
 const { MemoryStore } = require('flex-rate-limit');
+```
+
+### CacheHubStore
+
+基于 `cache-hub@^2.1.0` 的原子状态后端。可使用内存模式，也可传入 Redis client 使用 Redis Lua 原子路径。
+
+```javascript
+const { CacheHubStore } = require('flex-rate-limit');
 ```
 
 ### keyGenerators
@@ -232,6 +246,25 @@ const limiter = new RateLimiter({
   windowMs: 60000,
   max: 100,
   store: new RedisStore({
+    client: redis,
+    prefix: 'rl:',
+  }),
+});
+```
+
+### CacheHubStore 使用
+
+```javascript
+const Redis = require('ioredis');
+const { RateLimiter, CacheHubStore } = require('flex-rate-limit');
+
+const redis = new Redis('redis://localhost:6379');
+
+const limiter = new RateLimiter({
+  algorithm: 'sliding-window',
+  windowMs: 60000,
+  max: 100,
+  store: new CacheHubStore({
     client: redis,
     prefix: 'rl:',
   }),

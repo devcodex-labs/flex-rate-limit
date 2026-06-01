@@ -240,7 +240,7 @@ node examples/quickstart-hapi.js
 **相关主题**：
 - 📖 [业务锁指南](../guides/business-lock-guide.md) - 按用户+路由的精细化限流
 - 📖 [算法对比指南](../algorithms/comparison.md) - 选择合适的限流算法
-- 📖 [存储后端](../guides/storage.md) - Memory vs Redis选择
+- 📖 [存储后端](../guides/storage.md) - Memory、Redis、CacheHubStore 选择
 
 **返回**：
 - 📖 [文档中心](/README) - 查看所有文档和学习路径

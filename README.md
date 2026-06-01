@@ -10,7 +10,7 @@
 
 - 🚀 **框架无关核心** - `check()` 可接入 Express、Koa、Egg.js、Hapi、Fastify 等主流框架
 - 🎯 **多种算法** - 滑动窗口、令牌桶、漏桶、固定窗口
-- 💾 **多种存储后端** - 内存、Redis、自定义适配器
+- 💾 **多种存储后端** - 内存、Redis、CacheHubStore、自定义适配器
 - 🔧 **高度可配置** - 根据需求微调速率限制
 - 🌐 **分布式就绪** - 内置 Redis 支持分布式系统
 - 📊 **标准响应信息** - 返回限制上限、当前计数、剩余额度、重置时间和重试时间
@@ -26,6 +26,11 @@ npm install flex-rate-limit
 Redis 支持：
 ```bash
 npm install flex-rate-limit ioredis
+```
+
+cache-hub 原子后端支持：
+```bash
+npm install flex-rate-limit cache-hub ioredis
 ```
 
 ## 🚀 快速开始
@@ -88,6 +93,25 @@ app.listen(3000);
 
 查看完整的框架集成示例：[docs/getting-started/quickstart.md](docs/getting-started/quickstart.md)
 
+### CacheHubStore 原子后端
+
+`CacheHubStore` 让 flex-rate-limit 保持算法与中间件层，同时把高并发状态更新委托给 `cache-hub` 的原子后端：
+
+```javascript
+const Redis = require('ioredis');
+const { RateLimiter, CacheHubStore } = require('flex-rate-limit');
+
+const redis = new Redis('redis://localhost:6379');
+const limiter = new RateLimiter({
+  algorithm: 'sliding-window',
+  windowMs: 60 * 1000,
+  max: 100,
+  store: new CacheHubStore({ client: redis, prefix: 'rl:' }),
+});
+```
+
+如果不传 `client`，`CacheHubStore` 会使用 `cache-hub` 的内存原子后端。生产分布式场景建议传入 Redis client。
+
 ## 📚 文档
 
 👉 **[📚 完整文档导航](docs/README.md)** - 查看所有文档、学习路径、场景查找
@@ -111,7 +135,7 @@ npm run docs:build
 ### 更多文档
 
 - 📖 [高级用法](docs/guides/advanced.md) - 路由级限制、动态配置等
-- 📖 [存储后端](docs/guides/storage.md) - Memory vs Redis性能对比
+- 📖 [存储后端](docs/guides/storage.md) - Memory、Redis、CacheHubStore 选择
 - 📖 [算法深度分析](docs/algorithms/deep-analysis.md) - 源码分析与瞬时超频
 - 📖 [API参考](docs/reference/api-reference.md) - 完整API文档
 

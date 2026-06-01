@@ -8,6 +8,7 @@
   - [方式 2: 使用 ioredis 客户端](#方式-2-使用-ioredis-客户端)
   - [Redis 集群](#redis-集群)
   - [Redis 哨兵](#redis-哨兵)
+- [CacheHubStore 原子后端](#cachehubstore-原子后端)
 - [自定义存储后端](#自定义存储后端)
   - [基本接口](#基本接口)
   - [示例：PostgreSQL 存储](#示例postgresql-存储)
@@ -123,6 +124,37 @@ const limiter = new RateLimiter({
 - ✅ 高可用
 - ✅ 自动故障转移
 - ✅ 适合生产环境
+
+## CacheHubStore 原子后端
+
+`CacheHubStore` 使用 `cache-hub@^2.1.0` 的原子状态原语。它适合希望保留 flex-rate-limit 算法层，同时复用 cache-hub Redis Lua 原子后端的场景。
+
+```bash
+npm install flex-rate-limit cache-hub ioredis
+```
+
+```javascript
+const Redis = require('ioredis');
+const { RateLimiter, CacheHubStore } = require('flex-rate-limit');
+
+const redis = new Redis('redis://localhost:6379');
+
+const limiter = new RateLimiter({
+  algorithm: 'sliding-window',
+  windowMs: 60 * 1000,
+  max: 100,
+  store: new CacheHubStore({
+    client: redis,
+    prefix: 'rate-limit:',
+  }),
+});
+```
+
+**特点**:
+- ✅ fixed-window、sliding-window、token-bucket、leaky-bucket 均走 cache-hub 原子状态原语
+- ✅ Redis 路径由 cache-hub Lua 脚本保证高并发读改写安全
+- ✅ 不传 `client` 时可使用 cache-hub 内存原子后端
+- ✅ 保留 flex-rate-limit 的算法、middleware、响应头与框架集成
 
 ## 自定义存储
 

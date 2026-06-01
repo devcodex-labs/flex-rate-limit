@@ -7,6 +7,18 @@
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-06-01
+
+### Added
+- 新增 `CacheHubStore`，可选接入 `cache-hub@^2.1.0` 的 Memory / Redis 原子状态后端。
+- 新增 token-bucket、leaky-bucket 的 store rollback 快路径，支持 cache-hub opaque rollback token。
+- 新增 CacheHubStore 单元测试与 Redis 集成测试。
+
+### Changed
+- `index.d.ts`、CommonJS 入口、ESM 入口同步导出 `CacheHubStore`。
+- 文档、API reference、website 版本展示与存储指南同步更新为 `2.1.0`。
+- CI 增加 TypeScript 类型检查；覆盖率工具从 `nyc` 切换为支持 Node.js `>=18.0.0` 的 `c8`。
+
 ## [2.0.2] - 2026-06-01
 
 ### Performance

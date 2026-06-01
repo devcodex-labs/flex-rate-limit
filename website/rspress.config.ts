@@ -30,7 +30,7 @@ export default defineConfig({
   title: "flex-rate-limit",
   icon: "/favicon.svg",
   description:
-    "A universal Node.js rate limiting library with multiple algorithms, Memory and Redis storage, and framework-agnostic integration.",
+    "A universal Node.js rate limiting library with multiple algorithms, Memory, Redis, and cache-hub backed storage, and framework-agnostic integration.",
   outDir: path.join(__dirname, "dist"),
   plugins: [
     pluginSitemap({
@@ -68,7 +68,7 @@ export default defineConfig({
         activeMatch: "/benchmark",
       },
       {
-        text: "v2.0.2",
+        text: "v2.1.0",
         items: [
           {
             text: "Changelog",

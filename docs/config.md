@@ -276,6 +276,14 @@ store: new RedisStore({
   client: new Redis({ host: '127.0.0.1', port: 6379 }),
   prefix: 'rl:',
 })
+
+// 方式4：CacheHubStore 原子后端
+const { CacheHubStore } = require('flex-rate-limit');
+
+store: new CacheHubStore({
+  client: new Redis('redis://localhost:6379'),
+  prefix: 'rl:',
+})
 ```
 
 **默认值**：`'memory'`
@@ -283,6 +291,7 @@ store: new RedisStore({
 **选择建议**：
 - 单服务器：使用 `memory`（快速、简单）
 - 多服务器：使用 `Redis`（分布式、数据共享）
+- 需要复用 cache-hub 原子状态能力：使用 `CacheHubStore`
 
 ---
 

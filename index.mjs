@@ -6,11 +6,13 @@
 import RateLimiterCJS from './lib/rate-limiter.js';
 import MemoryStoreCJS from './lib/stores/memory-store.js';
 import RedisStoreCJS from './lib/stores/redis-store.js';
+import CacheHubStoreCJS from './lib/stores/cache-hub-store.js';
 import algorithmsCJS from './lib/algorithms/index.js';
 
 export const RateLimiter = RateLimiterCJS;
 export const MemoryStore = MemoryStoreCJS;
 export const RedisStore = RedisStoreCJS;
+export const CacheHubStore = CacheHubStoreCJS;
 export const algorithms = algorithmsCJS;
 
 // 预定义的键生成器
@@ -38,6 +40,7 @@ export default {
   RateLimiter,
   MemoryStore,
   RedisStore,
+  CacheHubStore,
   algorithms,
   keyGenerators,
 };
