@@ -1,3 +1,3 @@
 # Unreleased
 
-暂无未发布变更。
+No unreleased changes.

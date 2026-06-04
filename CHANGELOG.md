@@ -7,6 +7,12 @@
 
 ## [Unreleased]
 
+## [2.2.1] - 2026-06-04
+
+### Changed
+
+- Updated package license metadata, LICENSE text, README badge, and package distribution metadata to Apache-2.0.
+
 ## [2.2.0] - 2026-06-01
 
 ### Added

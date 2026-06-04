@@ -3,7 +3,7 @@
 > A framework-agnostic Node.js rate limiting library with multiple algorithms, Memory / Redis / cache-hub backed storage, and Express-style middleware.
 
 [![npm version](https://img.shields.io/npm/v/flex-rate-limit.svg)](https://www.npmjs.com/package/flex-rate-limit)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Node.js Version](https://img.shields.io/node/v/flex-rate-limit.svg)](https://nodejs.org)
 
 ## Why Use It
@@ -306,4 +306,4 @@ npm run coverage
 
 ## License
 
-[MIT](LICENSE)
+[Apache-2.0](LICENSE)
