@@ -7,6 +7,13 @@
 
 ## [Unreleased]
 
+## [2.2.2] - 2026-06-09
+
+### Changed
+
+- Pinned direct optional and dev dependencies in `package.json` to exact versions already resolved by `package-lock.json`.
+- Kept public API, optional dependency semantics, and Node.js baseline unchanged.
+
 ## [2.2.1] - 2026-06-04
 
 ### Changed
