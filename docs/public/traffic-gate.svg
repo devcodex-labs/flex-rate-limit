@@ -1,0 +1,54 @@
+<svg width="760" height="520" viewBox="0 0 760 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="panel" x1="52" y1="48" x2="704" y2="472" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#242620"/>
+      <stop offset="0.58" stop-color="#151713"/>
+      <stop offset="1" stop-color="#0d0f0c"/>
+    </linearGradient>
+    <linearGradient id="lane" x1="92" y1="0" x2="682" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ef3d59"/>
+      <stop offset="0.48" stop-color="#12b8b5"/>
+      <stop offset="1" stop-color="#a6d83f"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="142" y1="112" x2="658" y2="402" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ef3d59" stop-opacity="0.32"/>
+      <stop offset="0.55" stop-color="#12b8b5" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#a6d83f" stop-opacity="0.22"/>
+    </linearGradient>
+    <filter id="softShadow" x="0" y="0" width="760" height="520" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000000" flood-opacity="0.34"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softShadow)">
+    <rect x="54" y="48" width="652" height="424" rx="18" fill="url(#panel)" stroke="#3a3e34" stroke-width="2"/>
+    <rect x="82" y="76" width="596" height="58" rx="9" fill="#11130f" stroke="#34382f"/>
+    <circle cx="112" cy="105" r="8" fill="#ef3d59"/>
+    <circle cx="140" cy="105" r="8" fill="#e7b33b"/>
+    <circle cx="168" cy="105" r="8" fill="#a6d83f"/>
+    <path d="M214 105H644" stroke="#34382f" stroke-width="2" stroke-linecap="round" stroke-dasharray="10 12"/>
+
+    <rect x="94" y="172" width="572" height="62" rx="10" fill="#181b16" stroke="#34382f"/>
+    <path d="M122 203H616" stroke="#485044" stroke-width="16" stroke-linecap="round"/>
+    <path d="M122 203H424" stroke="url(#lane)" stroke-width="16" stroke-linecap="round"/>
+    <path d="M510 176V230" stroke="#ef3d59" stroke-width="3" stroke-linecap="round"/>
+    <path d="M456 176V230" stroke="#12b8b5" stroke-width="3" stroke-linecap="round"/>
+    <text x="122" y="194" fill="#f6f8ef" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700">sliding-window</text>
+    <text x="536" y="213" fill="#aeb8a6" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="600">92 / 100</text>
+
+    <rect x="94" y="258" width="256" height="146" rx="10" fill="#181b16" stroke="#34382f"/>
+    <text x="124" y="302" fill="#f6f8ef" font-family="Inter, Arial, sans-serif" font-size="46" font-weight="800">ALLOW</text>
+    <text x="127" y="337" fill="#a6d83f" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">remaining 8</text>
+    <path d="M124 366H310" stroke="#3b4337" stroke-width="10" stroke-linecap="round"/>
+    <path d="M124 366H286" stroke="#a6d83f" stroke-width="10" stroke-linecap="round"/>
+
+    <rect x="382" y="258" width="284" height="146" rx="10" fill="#181b16" stroke="#34382f"/>
+    <text x="414" y="299" fill="#f6f8ef" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800">retry-after</text>
+    <text x="414" y="352" fill="#12b8b5" font-family="Inter, Arial, sans-serif" font-size="48" font-weight="800">42 ms</text>
+    <path d="M414 382H628" stroke="#3b4337" stroke-width="8" stroke-linecap="round"/>
+    <path d="M414 382H516" stroke="#12b8b5" stroke-width="8" stroke-linecap="round"/>
+
+    <path d="M102 434H658" stroke="url(#lane)" stroke-width="3" stroke-linecap="round"/>
+    <path d="M102 152H658" stroke="url(#glow)" stroke-width="16" stroke-linecap="round" opacity="0.65"/>
+  </g>
+</svg>

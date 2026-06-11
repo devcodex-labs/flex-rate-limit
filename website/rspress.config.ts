@@ -213,6 +213,7 @@ export default defineConfig({
   lang: "en",
   title: "flex-rate-limit",
   icon: "/favicon.svg",
+  globalStyles: path.join(__dirname, "styles", "rate-limit-console.css"),
   description:
     "A universal Node.js rate limiting library with multiple algorithms, Memory, Redis, and cache-hub backed storage, and framework-agnostic integration.",
   outDir: path.join(__dirname, "dist"),

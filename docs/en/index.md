@@ -2,9 +2,13 @@
 pageType: home
 
 hero:
+  badge: v2.2.4 traffic control release
   name: flex-rate-limit
-  text: Universal Rate Limiting for Node.js
-  tagline: Framework-agnostic rate limiting with Memory, Redis, cache-hub atomic backends, four algorithms, and Express-style middleware.
+  text: Traffic Control for Node.js Services
+  tagline: Shape bursts, share counters, and expose predictable retry metadata with Memory, Redis, cache-hub atomic backends, four algorithms, and Express-style middleware.
+  image:
+    src: /traffic-gate.svg
+    alt: Rate limiting traffic control panel
   actions:
     - theme: brand
       text: Quick Start
@@ -17,25 +21,22 @@ hero:
       link: /benchmark
 
 features:
-  - title: Framework-Agnostic Core
-    details: Use check() directly in any runtime, or wrap middleware() for Express-compatible flows.
+  - title: Framework-Neutral Guard
+    details: Call check() directly in any runtime, or wrap middleware() for Express-compatible request flows.
     link: /getting-started/quickstart
-  - title: Four Algorithms
-    details: Sliding window, fixed window, token bucket, and leaky bucket cover fairness, burst, and shaping needs.
+  - title: Window and Bucket Control
+    details: Sliding window, fixed window, token bucket, and leaky bucket cover fairness, burst capacity, and smoothing needs.
     link: /algorithms/comparison
-  - title: Memory, Redis, and cache-hub
-    details: Start with in-process Memory, then move to Redis or CacheHubStore when counters must be shared.
+  - title: Shared Counter Backends
+    details: Start with in-process Memory, then move to Redis or CacheHubStore when counters must be shared across instances.
     link: /guides/storage
-  - title: Production Lifecycle
-    details: Close owned Redis clients and cache-hub cleanup timers with await limiter.close().
+  - title: Lifecycle Cleanup
+    details: Close owned Redis clients and cache-hub cleanup resources with await limiter.close().
     link: /guides/storage
-  - title: Allowlist Scenarios
-    details: Keep IP allowlist behavior independent from route rate limits, with global and route-level configuration patterns.
+  - title: Independent Allowlist
+    details: Keep IP allowlist authorization separate from route quotas, with global and route-level configuration patterns.
     link: /whitelist-ratelimit-config-scenarios
-  - title: Reproducible Benchmarks
+  - title: Measured Performance
     details: Memory, Redis direct, HTTP middleware, and OSS comparison data are documented with commands and environment.
     link: /benchmark
-  - title: Typed Package Surface
-    details: CommonJS, ESM, and TypeScript declarations share one runtime contract.
-    link: /reference/api-reference
 ---
