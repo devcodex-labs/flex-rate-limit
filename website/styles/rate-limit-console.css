@@ -227,6 +227,7 @@ body::after {
   display: flex !important;
   flex-wrap: wrap;
   gap: 14px;
+  margin-top: 18px;
   max-width: 100%;
 }
 
@@ -407,7 +408,11 @@ body::after {
   }
 
   .rp-home-hero .rp-home-hero__tagline {
+    width: min(100%, 330px) !important;
+    max-width: calc(100vw - 56px) !important;
     overflow-wrap: anywhere;
+    text-wrap: pretty;
+    white-space: normal;
   }
 
   .rp-home-hero .rp-home-hero__actions {
@@ -415,6 +420,7 @@ body::after {
     grid-template-columns: 1fr;
     width: min(296px, calc(100vw - 56px)) !important;
     max-width: calc(100vw - 56px) !important;
+    margin-top: 18px;
   }
 
   .rp-home-hero .rp-home-hero__action {
