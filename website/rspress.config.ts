@@ -96,6 +96,11 @@ const navSource: LocalizedNavItem[] = [
         zh: "npm",
         link: "https://www.npmjs.com/package/flex-rate-limit",
       },
+      {
+        en: "GitHub Organization",
+        zh: "GitHub 组织",
+        link: "https://github.com/vextjs",
+      },
     ],
   },
 ];
@@ -276,9 +281,6 @@ export default defineConfig({
         content: "https://github.com/vextjs/flex-rate-limit",
       },
     ],
-    footer: {
-      message: "Released under the Apache License 2.0.",
-    },
     lastUpdated: true,
   },
 });

@@ -10,3 +10,5 @@
 - Added stable CTA spacing and inner padding for the hero control-panel lane so labels and action buttons no longer look crowded on desktop viewports.
 - Restored light-theme documentation code blocks to a light panel treatment while preserving dark-theme code block styling.
 - Aligned the documentation homepage hero artwork with the copy block on desktop viewports.
+- Balanced the documentation homepage hero artwork vertically and reduced the empty gap before feature cards on desktop viewports.
+- Fixed the mobile homepage hero order and added a richer documentation footer with VextJS ecosystem and GitHub organization links.

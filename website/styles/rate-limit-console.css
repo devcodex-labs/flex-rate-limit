@@ -174,9 +174,9 @@ body::after {
 
 .rp-home-hero.rp-home-hero {
   max-width: 1180px;
-  min-height: min(760px, calc(100vh - 92px));
-  margin: 0 auto 34px;
-  padding: 86px 24px 58px !important;
+  min-height: min(640px, calc(100vh - 92px));
+  margin: 0 auto 24px;
+  padding: 86px 24px 46px !important;
 }
 
 .rp-home-hero .rp-home-hero__container {
@@ -265,7 +265,7 @@ body::after {
 .rp-home-hero .rp-home-hero__image {
   position: absolute;
   right: -16px;
-  top: 174px;
+  top: 230px;
   bottom: auto;
   z-index: 1;
   width: min(44vw, 520px);
@@ -375,6 +375,11 @@ body::after {
 }
 
 @media (max-width: 960px) {
+  .rp-home-hero.rp-home-hero {
+    flex-direction: column;
+    align-items: center;
+  }
+
   .rp-home-hero .rp-home-hero__container {
     min-height: auto;
   }
