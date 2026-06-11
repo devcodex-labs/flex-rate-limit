@@ -33,7 +33,11 @@
   --frl-button-alt: rgba(255, 255, 250, 0.78);
   --frl-feature-bg: linear-gradient(180deg, rgba(255, 255, 250, 0.92), rgba(246, 247, 241, 0.82));
   --frl-feature-shadow: 0 16px 34px rgba(36, 42, 32, 0.08);
-  --frl-code-bg: #11130f;
+  --frl-code-bg: rgba(255, 255, 250, 0.94);
+  --frl-code-border: rgba(36, 42, 32, 0.14);
+  --frl-code-text: #1d2119;
+  --frl-code-shadow: 0 14px 30px rgba(36, 42, 32, 0.08);
+  --frl-inline-code-bg: rgba(18, 184, 181, 0.08);
 }
 
 :root.rp-dark,
@@ -67,6 +71,10 @@
   --frl-feature-bg: linear-gradient(180deg, rgba(27, 30, 24, 0.92), rgba(17, 19, 15, 0.82));
   --frl-feature-shadow: 0 16px 34px rgba(0, 0, 0, 0.26);
   --frl-code-bg: #0b0d0a;
+  --frl-code-border: rgba(18, 184, 181, 0.18);
+  --frl-code-text: #f7f8ef;
+  --frl-code-shadow: none;
+  --frl-inline-code-bg: rgba(18, 184, 181, 0.12);
   --rp-c-bg: var(--frl-bg);
   --rp-c-bg-soft: var(--frl-bg-soft);
   --rp-c-bg-mute: #1f231b;
@@ -345,9 +353,24 @@ body::after {
 
 .rspress-doc :where(pre),
 .rp-doc :where(pre) {
-  border: 1px solid rgba(18, 184, 181, 0.18);
+  border: 1px solid var(--frl-code-border);
   border-radius: 8px;
   background: var(--frl-code-bg) !important;
+  box-shadow: var(--frl-code-shadow);
+}
+
+.rspress-doc :where(pre code),
+.rp-doc :where(pre code) {
+  background: transparent !important;
+  color: var(--frl-code-text);
+  text-shadow: none;
+}
+
+.rspress-doc :where(:not(pre) > code),
+.rp-doc :where(:not(pre) > code) {
+  border: 1px solid var(--frl-code-border);
+  background: var(--frl-inline-code-bg);
+  color: var(--frl-ink);
 }
 
 @media (max-width: 960px) {
