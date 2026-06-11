@@ -21,7 +21,7 @@ Latest local run:
 | OS / Arch | `win32 x64` |
 | CPU | Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz |
 | Redis | `redis://127.0.0.1:6379` |
-| Package version | `flex-rate-limit@2.2.3` working tree |
+| Package version | `flex-rate-limit@2.2.4` working tree |
 
 These numbers are local-machine measurements, not portable product claims.
 

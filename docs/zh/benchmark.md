@@ -21,7 +21,7 @@
 | OS / Arch | `win32 x64` |
 | CPU | Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz |
 | Redis | `redis://127.0.0.1:6379` |
-| 包版本 | `flex-rate-limit@2.2.3` working tree |
+| 包版本 | `flex-rate-limit@2.2.4` working tree |
 
 这些结果是本机测量值，不是跨机器通用的产品承诺。
 

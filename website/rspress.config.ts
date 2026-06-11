@@ -83,8 +83,8 @@ const navSource: LocalizedNavItem[] = [
     activeMatch: "/benchmark",
   },
   {
-    en: "v2.2.3",
-    zh: "v2.2.3",
+    en: "v2.2.4",
+    zh: "v2.2.4",
     items: [
       {
         en: "Changelog",

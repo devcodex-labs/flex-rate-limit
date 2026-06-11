@@ -6,6 +6,8 @@
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Node.js Version](https://img.shields.io/node/v/flex-rate-limit.svg)](https://nodejs.org)
 
+[Documentation](https://vextjs.github.io/flex-rate-limit/) · [中文文档](https://vextjs.github.io/flex-rate-limit/zh/) · [Examples](https://github.com/vextjs/flex-rate-limit/tree/main/examples)
+
 ## Why Use It
 
 - **Framework-agnostic core**: call `check()` from Express, Koa, Egg.js, Hapi, Fastify, workers, queues, or any custom adapter.
@@ -301,7 +303,7 @@ npm run coverage
 ## Related Projects
 
 - [monSQLize](https://github.com/vextjs/monSQLize) - MongoDB ORM with caching
-- [schema-dsl](https://github.com/vextjs/schema-dsl) - JSON Schema validation
+- [schema-dsl](https://vextjs.github.io/schema-dsl/) ([GitHub](https://github.com/vextjs/schema-dsl)) - JSON Schema validation
 - [jrpc](https://github.com/vextjs/jrpc) - JSON-RPC 2.0 implementation
 
 ## Support

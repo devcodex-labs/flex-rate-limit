@@ -7,6 +7,20 @@
 
 ## [Unreleased]
 
+## [2.2.4] - 2026-06-11
+
+### Changed
+
+- Added a GitHub Pages workflow that installs root and website dependencies, validates documentation, and builds the Rspress documentation site before deploying `website/dist`.
+- Added top-level README links to the `flex-rate-limit` documentation site and Chinese documentation.
+- Moved the `schema-dsl` documentation link into Related Projects so the README top area keeps `flex-rate-limit` as the primary product signal.
+
+### Compatibility
+
+- Public APIs remain compatible with `2.2.x`.
+- Node.js support remains `>=18.0.0`.
+- Runtime package contents remain unchanged apart from README metadata.
+
 ## [2.2.3] - 2026-06-11
 
 ### Changed
