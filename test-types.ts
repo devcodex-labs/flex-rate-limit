@@ -9,7 +9,7 @@ import flexRateLimit, {
 } from './index';
 
 const memoryStore = new MemoryStore();
-const redisStore = new RedisStore({ client: {} as any });
+const redisStore = new RedisStore({ client: {} as any, ownsClient: true });
 const cacheHubStore = new CacheHubStore({ redis: {} as any, prefix: 'rl:' });
 
 const options: RateLimiterOptions = {
@@ -26,6 +26,7 @@ const limiter = new RateLimiter(options);
 void limiter.check('user:1');
 void limiter.reset('user:1');
 void limiter.resetAll();
+void limiter.close();
 limiter.middleware();
 
 const stores: Store[] = [memoryStore, redisStore, cacheHubStore];
@@ -36,4 +37,9 @@ const defaultLimiter = new flexRateLimit.RateLimiter({
   keyGenerator: keyGenerators.ip,
 });
 
+const redisUrlLimiter = new RateLimiter({
+  store: 'redis://127.0.0.1:6379',
+});
+
+void redisUrlLimiter.close();
 void defaultLimiter;

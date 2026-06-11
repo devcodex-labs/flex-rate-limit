@@ -8,6 +8,7 @@
     - [check(key, options)](#checkkey-options)
     - [middleware()](#middleware)
     - [reset(key)](#resetkey)
+    - [close()](#close)
 - [配置选项速查](#配置选项速查)
 - [Store 接口速查](#store-接口速查)
 - [预定义键生成器](#预定义键生成器)
@@ -73,6 +74,14 @@ await limiter.reset('user-123');
 await limiter.resetAll();
 ```
 
+#### close()
+
+关闭当前 limiter 拥有的存储资源。`store: 'redis://...'` 创建的 Redis client 会在这里关闭；外部传入的 Redis client 默认仍由调用方管理。
+
+```javascript
+await limiter.close();
+```
+
 ## 配置选项速查
 
 | 选项 | 类型 | 默认值 | 说明 |
@@ -80,7 +89,7 @@ await limiter.resetAll();
 | `windowMs` | `number` | `60000` | 时间窗口大小，单位毫秒 |
 | `max` | `number \| function` | `100` | 最大请求数，支持按请求动态计算 |
 | `algorithm` | `'sliding-window' \| 'fixed-window' \| 'token-bucket' \| 'leaky-bucket'` | `'sliding-window'` | 限流算法 |
-| `store` | `Store \| 'memory'` | `'memory'` | 存储后端；Redis 可传入 `new RedisStore({ client })`，原子后端可传入 `new CacheHubStore({ client })` |
+| `store` | `Store \| 'memory' \| 'redis://...'` | `'memory'` | 存储后端；Redis 可传入连接字符串或 `new RedisStore({ client })`，原子后端可传入 `new CacheHubStore({ client })` |
 | `keyGenerator` | `function` | 按 IP | 生成限流键；预定义生成器通过 `keyGenerators.*` 传入 |
 | `skip` | `function` | `() => false` | 返回 `true` 时跳过限流 |
 | `handler` | `function \| null` | `null` | 超限后的自定义响应处理器 |
@@ -111,6 +120,7 @@ interface Store {
   rollbackLeakyBucket?(key: string, rollbackData?: any): Promise<void>;
   reset(key: string): Promise<void>;
   resetAll?(): Promise<void>;
+  close?(): Promise<void>;
 }
 ```
 
@@ -141,6 +151,8 @@ Redis 存储后端。
 const { RedisStore } = require('flex-rate-limit');
 ```
 
+`new RedisStore({ client })` 默认不关闭外部 Redis client；设置 `ownsClient: true` 后，`await store.close()` 或 `await limiter.close()` 会关闭该 client。
+
 ### MemoryStore
 
 内存存储后端（通常不需要直接使用）。
@@ -151,7 +163,7 @@ const { MemoryStore } = require('flex-rate-limit');
 
 ### CacheHubStore
 
-基于 `cache-hub@^2.1.0` 的原子状态后端。可使用内存模式，也可传入 Redis client 使用 Redis Lua 原子路径。
+基于 `cache-hub@2.2.4` 的原子状态后端。可使用内存模式，也可传入 Redis client 使用 Redis Lua 原子路径。
 
 ```javascript
 const { CacheHubStore } = require('flex-rate-limit');
@@ -251,6 +263,9 @@ const limiter = new RateLimiter({
     prefix: 'rl:',
   }),
 });
+
+// 关闭外部 redis client 仍由调用方负责：
+await redis.quit();
 ```
 
 ### CacheHubStore 使用
@@ -270,6 +285,8 @@ const limiter = new RateLimiter({
     prefix: 'rl:',
   }),
 });
+
+await limiter.close();
 ```
 
 ---

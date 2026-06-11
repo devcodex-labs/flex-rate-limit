@@ -7,6 +7,39 @@
 
 ## [Unreleased]
 
+## [2.2.3] - 2026-06-11
+
+### Changed
+
+- Upgraded the optional `cache-hub` dependency to `2.2.4` and aligned `CacheHubStore` with its public in-memory rate-limit cleanup API.
+- Reworked the Rspress documentation site to use English as the default locale and Simplified Chinese under `/zh/`.
+- Refreshed benchmark documentation with the 2026-06-11 local Memory, Redis, HTTP, and OSS comparison results.
+- Clarified the project documentation policy: future English and Simplified Chinese user-facing docs must be updated together.
+- Expanded the English documentation from summary-style pages into full parity user docs, including algorithms, API reference, business lock guidance, and allowlist scenarios.
+- Added `npm run docs:validate` for Markdown link, anchor, stale docs path, and npm README package-boundary checks.
+
+### Fixed
+
+- Added TTL cleanup for auto-created in-memory `CacheHubStore` rate-limit primitives.
+- Reworked `CacheHubStore` in-memory state cleanup to avoid deleting still-active sliding-window entries for the same key.
+- Added ownership-aware `RedisStore.close()` and `RateLimiter.close()` for store-owned Redis clients and cleanup resources.
+- Changed public `RateLimiter.check()` results to omit hidden rollback metadata unless rollback tracking is explicitly requested.
+- Registered middleware rollback response lifecycle listeners before `next()` so synchronous handlers are covered by `skipSuccessfulRequests` and `skipFailedRequests`.
+- Replaced npm README links to unpacked `docs/**` and `examples/**` paths with stable documentation website and GitHub links.
+- Fixed stale docs paths and hand-written table-of-contents anchors in the bilingual documentation set.
+
+### Tests
+
+- Added CacheHubStore in-memory pressure regression coverage for all four algorithms.
+- Added sliding-window same-key active-entry cleanup regression.
+- Added middleware regression coverage for successful and failed responses that emit `finish` synchronously inside `next()`.
+
+### Compatibility
+
+- Public APIs remain compatible with `2.2.x`.
+- Node.js support remains `>=18.0.0`.
+- `cache-hub` remains optional; existing Memory and RedisStore users do not need to change code.
+
 ## [2.2.2] - 2026-06-09
 
 ### Changed

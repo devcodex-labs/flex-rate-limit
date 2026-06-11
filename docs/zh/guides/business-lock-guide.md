@@ -717,8 +717,8 @@ async checkLimitStatus(ctx) {
 ### 相关资源
 
 - **完整示例**: `examples/egg-business-lock-example.js`
-- **API文档**: `docs/api-reference.md`
-- **高级用法**: `docs/advanced.md`
+- **API文档**: `docs/zh/reference/api-reference.md`
+- **高级用法**: `docs/zh/guides/advanced.md`
 
 ---
 

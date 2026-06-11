@@ -6,13 +6,12 @@
 - [Redis 存储](#redis-存储)
   - [方式 1: 连接字符串（推荐）](#方式-1-连接字符串推荐)
   - [方式 2: 使用 ioredis 客户端](#方式-2-使用-ioredis-客户端)
-  - [Redis 集群](#redis-集群)
-  - [Redis 哨兵](#redis-哨兵)
+  - [方式 3: Redis 集群](#方式-3-redis-集群)
+  - [方式 4: Redis Sentinel](#方式-4-redis-sentinel)
 - [CacheHubStore 原子后端](#cachehubstore-原子后端)
-- [自定义存储后端](#自定义存储后端)
-  - [基本接口](#基本接口)
-  - [示例：PostgreSQL 存储](#示例postgresql-存储)
-  - [示例：MongoDB 存储](#示例mongodb-存储)
+- [自定义存储](#自定义存储)
+- [存储对比](#存储对比)
+- [选择指南](#选择指南)
 - [性能对比](#性能对比)
 - [选择建议](#选择建议)
 
@@ -56,6 +55,7 @@ const limiter = new RateLimiter({
 - ✅ 最简洁
 - ✅ 自动创建连接
 - ✅ 开箱即用
+- ⚠️ 短生命周期脚本或测试结束前应调用 `await limiter.close()` 关闭库创建的 Redis client
 
 ### 方式 2: 使用 ioredis 客户端
 
@@ -82,6 +82,7 @@ const limiter = new RateLimiter({
 - ✅ 完全控制连接
 - ✅ 支持连接池
 - ✅ 支持高级配置
+- ✅ 外部传入 client 默认由调用方管理；如需 `RedisStore.close()` 关闭它，可设置 `ownsClient: true`
 
 ### 方式 3: Redis 集群
 
@@ -127,7 +128,7 @@ const limiter = new RateLimiter({
 
 ## CacheHubStore 原子后端
 
-`CacheHubStore` 使用 `cache-hub@^2.1.0` 的原子状态原语。它适合希望保留 flex-rate-limit 算法层，同时复用 cache-hub Redis Lua 原子后端的场景。
+`CacheHubStore` 使用 `cache-hub@2.2.4` 的原子状态原语。它适合希望保留 flex-rate-limit 算法层，同时复用 cache-hub Redis Lua 原子后端的场景。
 
 ```bash
 npm install flex-rate-limit cache-hub ioredis
@@ -153,8 +154,9 @@ const limiter = new RateLimiter({
 **特点**:
 - ✅ fixed-window、sliding-window、token-bucket、leaky-bucket 均走 cache-hub 原子状态原语
 - ✅ Redis 路径由 cache-hub Lua 脚本保证高并发读改写安全
-- ✅ 不传 `client` 时可使用 cache-hub 内存原子后端
+- ✅ 不传 `client` 时可使用 cache-hub 内存原子后端，过期限流状态会自动清理
 - ✅ 保留 flex-rate-limit 的算法、middleware、响应头与框架集成
+- ✅ 可通过 `await limiter.close()` 关闭内部清理定时器或 cache 资源
 
 ## 自定义存储
 

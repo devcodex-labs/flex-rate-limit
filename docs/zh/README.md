@@ -1,11 +1,11 @@
 # 📚 flex-rate-limit 文档中心
 
 > **项目**: flex-rate-limit
-> **版本**: 2.2.0
+> **版本**: 2.2.3
 > **运行时**: Node.js >= 18.0.0
 > **仓库**: https://github.com/vextjs/flex-rate-limit
 > **Website**: https://vextjs.github.io/flex-rate-limit
-> **更新**: 2026-06-01
+> **更新**: 2026-06-11
 
 ---
 
@@ -36,7 +36,7 @@
 5. **[存储后端](guides/storage.md)**
    Memory vs Redis vs CacheHubStore，性能对比与选择决策
 
-6. **[Benchmark and Performance](benchmark.md)**
+6. **[性能基准](benchmark.md)**
    Memory、Redis direct、HTTP middleware 本地基准测试命令
 
 7. **[IP 白名单配置场景](whitelist-ratelimit-config-scenarios.md)** ⭐ 新增

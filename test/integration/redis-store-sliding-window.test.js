@@ -5,6 +5,8 @@ class MockRedisClient {
   constructor() {
     this.values = new Map();
     this.sortedSets = new Map();
+    this.quitCalled = false;
+    this.disconnectCalled = false;
   }
 
   get(key) {
@@ -123,6 +125,15 @@ class MockRedisClient {
 
     return Promise.resolve(slice.map((entry) => entry.member));
   }
+
+  quit() {
+    this.quitCalled = true;
+    return Promise.resolve('OK');
+  }
+
+  disconnect() {
+    this.disconnectCalled = true;
+  }
 }
 
 describe('RedisStore sliding window integration', () => {
@@ -180,8 +191,8 @@ describe('RedisStore sliding window integration', () => {
       store,
     });
 
-    const first = await limiter.check('redis-user');
-    const second = await limiter.check('redis-user');
+    const first = await limiter.check('redis-user', { trackRollback: true });
+    const second = await limiter.check('redis-user', { trackRollback: true });
 
     await first._internal.algorithm.rollback(
       store,
@@ -193,5 +204,21 @@ describe('RedisStore sliding window integration', () => {
     const entries = client.sortedSets.get('rl:redis-user:scores');
     expect(entries).to.have.length(1);
     expect(entries[0].member).to.equal(second._internal.rollbackData.member);
+  });
+
+  it('should close only owned Redis clients', async () => {
+    const externalClient = new MockRedisClient();
+    const externalStore = new RedisStore({ client: externalClient });
+
+    await externalStore.close();
+    expect(externalClient.quitCalled).to.be.false;
+    expect(externalClient.disconnectCalled).to.be.false;
+
+    const ownedClient = new MockRedisClient();
+    const ownedStore = new RedisStore({ client: ownedClient, ownsClient: true });
+
+    await ownedStore.close();
+    expect(ownedClient.quitCalled).to.be.true;
+    expect(ownedClient.disconnectCalled).to.be.false;
   });
 });

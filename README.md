@@ -112,7 +112,7 @@ async function guard(ctx, next) {
 }
 ```
 
-See the runnable framework examples in [`examples/`](examples/) and the quickstart guide in [`docs/getting-started/quickstart.md`](docs/getting-started/quickstart.md).
+See the runnable framework examples on [GitHub](https://github.com/vextjs/flex-rate-limit/tree/main/examples) and the [quickstart guide](https://vextjs.github.io/flex-rate-limit/getting-started/quickstart).
 
 ## Storage Backends
 
@@ -145,9 +145,11 @@ const limiter = new RateLimiter({
 });
 ```
 
+If you pass `store: 'redis://...'`, `RateLimiter` creates and owns the Redis client; call `await limiter.close()` during shutdown. When you pass your own Redis client to `RedisStore`, that client remains caller-owned unless you set `ownsClient: true`.
+
 ### CacheHubStore
 
-`CacheHubStore` keeps `flex-rate-limit` as the algorithm and middleware layer while delegating high-concurrency state updates to `cache-hub` atomic primitives. Pass a Redis client for distributed production usage; omit the client only when an in-memory cache-hub backend is acceptable.
+`CacheHubStore` keeps `flex-rate-limit` as the algorithm and middleware layer while delegating high-concurrency state updates to `cache-hub` atomic primitives. Pass a Redis client for distributed production usage; omit the client only when an in-memory cache-hub backend is acceptable. The in-memory cache-hub path prunes expired rate-limit state automatically, and `await limiter.close()` closes store-owned cleanup timers or cache resources.
 
 ```javascript
 const Redis = require('ioredis');
@@ -163,7 +165,7 @@ const limiter = new RateLimiter({
 });
 ```
 
-Read more in the [storage guide](docs/guides/storage.md).
+Read more in the [storage guide](https://vextjs.github.io/flex-rate-limit/guides/storage).
 
 ## Algorithms
 
@@ -174,7 +176,7 @@ Read more in the [storage guide](docs/guides/storage.md).
 | `token-bucket` | Controlled bursts | Allows bursts up to capacity and refills over time |
 | `leaky-bucket` | Smoothing traffic | Drains at a steady rate |
 
-Choose semantics first, then optimize storage and hot paths. See [algorithm comparison](docs/algorithms/comparison.md) and [deep analysis](docs/algorithms/deep-analysis.md).
+Choose semantics first, then optimize storage and hot paths. See [algorithm comparison](https://vextjs.github.io/flex-rate-limit/algorithms/comparison) and [deep analysis](https://vextjs.github.io/flex-rate-limit/algorithms/deep-analysis).
 
 ## Common Configuration
 
@@ -210,7 +212,7 @@ const limiter = new RateLimiter({
 | `skipSuccessfulRequests` | `false` | Roll back successful responses |
 | `skipFailedRequests` | `false` | Roll back failed responses |
 
-Full details are in the [configuration guide](docs/guides/config.md) and [API reference](docs/reference/api-reference.md).
+Full details are in the [configuration guide](https://vextjs.github.io/flex-rate-limit/guides/config) and [API reference](https://vextjs.github.io/flex-rate-limit/reference/api-reference).
 
 ## Result Shape
 
@@ -240,31 +242,33 @@ npm run benchmark:http
 
 The npm runtime package does not require benchmark dependencies. Redis and HTTP benchmark output records the Node.js version, Redis URL, key distribution, concurrency, and other parameters. Use `BENCH_JSON=1` when you need machine-readable output.
 
-See [Benchmark and Performance](docs/benchmark.md) for commands, environment variables, and interpretation notes.
+See [Benchmark and Performance](https://vextjs.github.io/flex-rate-limit/benchmark) for commands, environment variables, and interpretation notes.
 
 ## Documentation
 
 | Entry | Description |
 |-------|-------------|
-| [Documentation index](docs/README.md) | Full documentation navigation |
-| [Quickstart](docs/getting-started/quickstart.md) | First integration path and framework examples |
-| [Configuration](docs/guides/config.md) | Complete option reference and practical presets |
-| [Storage](docs/guides/storage.md) | Memory, Redis, and CacheHubStore selection |
-| [Business lock guide](docs/guides/business-lock-guide.md) | User + route scoped rate limiting |
-| [Algorithm comparison](docs/algorithms/comparison.md) | Choosing the right algorithm |
-| [API reference](docs/reference/api-reference.md) | Classes, options, stores, and exports |
-| [Benchmark guide](docs/benchmark.md) | Local benchmark commands and caveats |
+| [Documentation index](https://vextjs.github.io/flex-rate-limit/) | English documentation navigation |
+| [Chinese documentation](https://vextjs.github.io/flex-rate-limit/zh/) | Simplified Chinese documentation navigation |
+| [Quickstart](https://vextjs.github.io/flex-rate-limit/getting-started/quickstart) | First integration path and framework examples |
+| [Configuration](https://vextjs.github.io/flex-rate-limit/guides/config) | Complete option reference and practical presets |
+| [Storage](https://vextjs.github.io/flex-rate-limit/guides/storage) | Memory, Redis, and CacheHubStore selection |
+| [Business lock guide](https://vextjs.github.io/flex-rate-limit/guides/business-lock-guide) | User + route scoped rate limiting |
+| [Algorithm comparison](https://vextjs.github.io/flex-rate-limit/algorithms/comparison) | Choosing the right algorithm |
+| [API reference](https://vextjs.github.io/flex-rate-limit/reference/api-reference) | Classes, options, stores, and exports |
+| [Benchmark guide](https://vextjs.github.io/flex-rate-limit/benchmark) | Local benchmark commands and caveats |
 
 The website is built with Rspress and reuses the `docs/` directory:
 
 ```bash
 npm run docs:dev
+npm run docs:validate
 npm run docs:build
 ```
 
 ## Examples
 
-Runnable examples are available in [`examples/`](examples/):
+Runnable examples are available on [GitHub](https://github.com/vextjs/flex-rate-limit/tree/main/examples):
 
 | Category | Files |
 |----------|-------|
@@ -290,6 +294,7 @@ npm run coverage
 - **Counters are not shared across instances**: use `RedisStore` or `CacheHubStore` with a Redis client instead of the default Memory store.
 - **Redis benchmarks are skipped**: start Redis locally or set `REDIS_URL` / `BENCH_REDIS_URL`.
 - **Package installs but Redis code fails at runtime**: install and configure a Redis client such as `ioredis`.
+- **Short-lived scripts keep running after Redis usage**: call `await limiter.close()` when using `store: 'redis://...'`, or pass `ownsClient: true` to `RedisStore` if the store should close your client.
 - **Koa/Fastify/Hapi integration feels awkward**: call `check()` directly and wrap the result in the framework's native middleware or hook style.
 - **Benchmark numbers differ from the docs or CI**: local CPU, Node.js version, Redis latency, key distribution, and HTTP app work all affect throughput.
 

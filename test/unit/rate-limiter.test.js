@@ -149,6 +149,31 @@ describe('RateLimiter', () => {
       expect(result1.allowed).to.be.false;
       expect(result2.allowed).to.be.true;
     });
+
+    it('should not attach internal rollback metadata by default', async () => {
+      const limiter = new RateLimiter({
+        windowMs: 60000,
+        max: 2,
+      });
+      const req = { ip: '127.0.0.1', largePayload: Buffer.alloc(1024) };
+
+      const result = await limiter.check('public-result', { req });
+
+      expect(Object.prototype.hasOwnProperty.call(result, '_internal')).to.be.false;
+    });
+
+    it('should attach internal rollback metadata only when explicitly requested', async () => {
+      const limiter = new RateLimiter({
+        windowMs: 60000,
+        max: 2,
+      });
+
+      const result = await limiter.check('rollback-result', { trackRollback: true });
+
+      expect(Object.prototype.hasOwnProperty.call(result, '_internal')).to.be.true;
+      expect(Object.keys(result)).to.not.include('_internal');
+      expect(result._internal.key).to.equal('rollback-result');
+    });
   });
 
   describe('reset()', () => {
@@ -210,6 +235,27 @@ describe('RateLimiter', () => {
       expect(result1.current).to.equal(1);
       expect(result2.current).to.equal(1);
       expect(result3.current).to.equal(1);
+    });
+  });
+
+  describe('close()', () => {
+    it('should delegate resource cleanup to stores that support close()', async () => {
+      let closed = false;
+      const store = {
+        get: () => Promise.resolve(null),
+        set: () => Promise.resolve(),
+        increment: () => Promise.resolve({ count: 1, resetTime: Date.now() + 60000 }),
+        reset: () => Promise.resolve(),
+        close: () => {
+          closed = true;
+          return Promise.resolve();
+        },
+      };
+      const limiter = new RateLimiter({ store });
+
+      await limiter.close();
+
+      expect(closed).to.be.true;
     });
   });
 
@@ -332,6 +378,29 @@ describe('RateLimiter', () => {
       const firstRes = createMockResponse();
       await middleware(req, firstRes, () => {});
       firstRes.emit('finish');
+      await new Promise((resolve) => setImmediate(resolve));
+
+      const secondRes = createMockResponse();
+      await middleware(req, secondRes, () => {});
+
+      expect(secondRes.statusCode).to.equal(200);
+      expect(secondRes.payload).to.be.undefined;
+    });
+
+    it('should rollback successful requests that finish synchronously in next', async () => {
+      const limiter = new RateLimiter({
+        windowMs: 60000,
+        max: 1,
+        skipSuccessfulRequests: true,
+      });
+
+      const middleware = limiter.middleware();
+      const req = { ip: '127.0.0.1', path: '/sync-ok' };
+
+      const firstRes = createMockResponse();
+      await middleware(req, firstRes, () => {
+        firstRes.emit('finish');
+      });
       await new Promise((resolve) => setImmediate(resolve));
 
       const secondRes = createMockResponse();

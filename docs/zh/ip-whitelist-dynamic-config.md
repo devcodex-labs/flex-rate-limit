@@ -339,7 +339,7 @@ echo ".env" >> .gitignore
 ## 📚 相关文档
 
 - **完整实现报告**: `reports/多框架IP白名单动态配置实现报告.md`
-- **高级用法**: `docs/guides/advanced.md#ip-白名单与黑名单-`
+- **高级用法**: `guides/advanced.md#ip-白名单与黑名单-`
 - **基础示例**: `examples/ip-whitelist-example.js`
 - **Express 高级**: `examples/express-ip-whitelist-advanced.js`
 - **Koa 高级**: `examples/koa-ip-whitelist-advanced.js`

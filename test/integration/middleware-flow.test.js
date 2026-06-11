@@ -43,6 +43,30 @@ describe('RateLimiter integration flow', () => {
     expect(secondRes.payload).to.be.undefined;
   });
 
+  it('should rollback failed requests that finish synchronously in next', async () => {
+    const limiter = new RateLimiter({
+      windowMs: 60000,
+      max: 1,
+      skipFailedRequests: true,
+    });
+
+    const middleware = limiter.middleware();
+    const req = { ip: '127.0.0.1', path: '/sync-submit' };
+
+    const firstRes = createMockResponse();
+    await middleware(req, firstRes, () => {
+      firstRes.statusCode = 500;
+      firstRes.emit('finish');
+    });
+    await new Promise((resolve) => setImmediate(resolve));
+
+    const secondRes = createMockResponse(200);
+    await middleware(req, secondRes, () => {});
+
+    expect(secondRes.statusCode).to.equal(200);
+    expect(secondRes.payload).to.be.undefined;
+  });
+
   it('should prioritize middleware overrides over base config', async () => {
     const limiter = new RateLimiter({
       windowMs: 60000,

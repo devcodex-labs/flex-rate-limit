@@ -1,4 +1,4 @@
-// Type definitions for flex-rate-limit v2.2.0
+// Type definitions for flex-rate-limit v2.2.3
 // Project: https://github.com/vextjs/flex-rate-limit
 // Definitions by: vext.js Team
 
@@ -119,6 +119,7 @@ export interface RateLimiterOptions extends RateLimiterRuleOptions {
    * 存储后端
    * - Store 实例：自定义或内置的存储后端（MemoryStore、RedisStore、CacheHubStore）
    * - 'memory'：使用默认内存存储
+   * - 'redis://...'：由 RateLimiter 创建并拥有 Redis 客户端，可通过 close() 关闭
    * @default 'memory'
    * @example
    * ```typescript
@@ -129,6 +130,9 @@ export interface RateLimiterOptions extends RateLimiterRuleOptions {
    * const redis = new Redis();
    * store: new RedisStore({ client: redis })
    *
+   * // 使用 Redis 连接字符串
+   * store: 'redis://127.0.0.1:6379'
+   *
    * // 使用 cache-hub 原子状态后端
    * store: new CacheHubStore({ client: redis })
    *
@@ -138,7 +142,7 @@ export interface RateLimiterOptions extends RateLimiterRuleOptions {
    *   : 'memory'
    * ```
    */
-  store?: Store | 'memory';
+  store?: Store | 'memory' | `redis://${string}`;
 
   /**
    * 路由级别配置：为不同路由设置不同的限制
@@ -165,6 +169,7 @@ export interface Store {
   rollbackLeakyBucket?(key: string, rollbackData?: any): Promise<void>;
   reset(key: string): Promise<void>;
   resetAll?(): Promise<void>;
+  close?(): Promise<void>;
 }
 
 /**
@@ -192,6 +197,8 @@ export interface RedisClient {
   type(key: string): Promise<string>;
   scan?(cursor: string, ...args: Array<string | number>): Promise<[string, string[]]>;
   pipeline?(): RedisPipeline;
+  quit?(): Promise<any>;
+  disconnect?(): void;
 }
 
 /**
@@ -227,6 +234,19 @@ export interface RedisStoreOptions {
    * @default 3600
    */
   expiry?: number;
+
+  /**
+   * 是否在 RedisStore.close() 时关闭 Redis 客户端。
+   * 外部传入 client 默认由调用方管理。
+   * @default false
+   */
+  ownsClient?: boolean;
+
+  /**
+   * ownsClient 的兼容别名。
+   * @default false
+   */
+  closeClient?: boolean;
 }
 
 /**
@@ -254,6 +274,7 @@ export interface CacheHubStoreOptions {
    * @default 3600
    */
   expiry?: number;
+
 }
 
 /**
@@ -341,6 +362,11 @@ export class RateLimiter {
   resetAll(): Promise<void>;
 
   /**
+   * 关闭当前 limiter 拥有的存储资源。
+   */
+  close(): Promise<void>;
+
+  /**
    * 为 Web 框架创建中间件
    * @param options - 中间件选项
    * @returns Express-style `(req, res, next)` 中间件函数；Koa/Egg.js/Fastify/Hapi 请用 check() 包装到对应框架适配器
@@ -373,6 +399,7 @@ export class RedisStore implements Store {
   decrement(key: string): Promise<void>;
   reset(key: string): Promise<void>;
   resetAll(): Promise<void>;
+  close(): Promise<void>;
 }
 
 /**

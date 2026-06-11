@@ -33,6 +33,7 @@
    ```bash
    npm test
    npm run lint
+   npm run docs:validate
    ```
 
 4. 提交您的更改
@@ -50,8 +51,8 @@
 ## Profile 联动检查
 
 - `.devcodex/flex-rate-limit/profile/` 是本项目的内部 overlay 真相源之一，公共契约调整不能只改源码或文档单点。
-- 若修改 `package.json` 的 `version`、`main`、`types`、`exports`、`files`、`homepage` 或 `repository`，请同时同步 `README.md`、`docs/README.md`、`website/rspress.config.ts`、`.devcodex/flex-rate-limit/profile/01-项目信息.md` 与 `changelogs/unreleased.md`。
-- 若修改公开接口、导出、类型签名或示例行为，请同时同步 `index.d.ts`、`docs/reference/api-reference.md`、相关 README 示例、测试，以及 `.devcodex/flex-rate-limit/profile/02-架构约束.md`。
+- 若修改 `package.json` 的 `version`、`main`、`types`、`exports`、`files`、`homepage` 或 `repository`，请同时同步 `README.md`、`docs/en/README.md`、`docs/zh/README.md`、`website/rspress.config.ts`、`.devcodex/flex-rate-limit/profile/01-项目信息.md` 与 `changelogs/unreleased.md`。
+- 若修改公开接口、导出、类型签名或示例行为，请同时同步 `index.d.ts`、`docs/en/reference/api-reference.md`、`docs/zh/reference/api-reference.md`、相关 README 示例、测试，以及 `.devcodex/flex-rate-limit/profile/02-架构约束.md`。
 - 提交前至少完成一次 `package.json ↔ index.d.ts ↔ README/docs ↔ profile` 一致性检查。
 
 ## 代码风格

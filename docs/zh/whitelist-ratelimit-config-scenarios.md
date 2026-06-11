@@ -495,9 +495,9 @@ this.routeWhitelists['/api/internal'] = []; // ❌ 这样会导致所有 IP 被�
 ## 📚 相关文档
 
 - **完整实现**: `examples/express-ip-whitelist-independent.js`
-- **对比说明**: `docs/whitelist-ratelimit-independence.md`
+- **对比说明**: `docs/zh/whitelist-ratelimit-independence.md`
 - **实现报告**: `reports/白名单与限流独立性实现报告.md`
-- **快速指南**: `docs/ip-whitelist-dynamic-config.md`
+- **快速指南**: `docs/zh/ip-whitelist-dynamic-config.md`
 
 ---
 

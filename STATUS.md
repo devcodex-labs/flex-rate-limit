@@ -1,8 +1,8 @@
-# rate-limit 项目状态
+# flex-rate-limit 项目状态
 
-## 版本：1.0.0
+## 版本：2.2.3
 
-## 项目状态：✅ 初始发布
+## 项目状态：✅ 维护中
 
 ### 已完成功能
 
@@ -16,9 +16,13 @@
 - ✅ 存储后端
   - ✅ 内存存储
   - ✅ Redis 存储
+  - ✅ CacheHubStore（基于 cache-hub@2.2.4 的可选原子状态后端）
 - ✅ 框架集成
   - ✅ Express 中间件
-  - ✅ Koa 中间件
+  - ✅ Koa 集成示例
+  - ✅ Egg.js 集成示例
+  - ✅ Hapi 集成示例
+  - ✅ Fastify 集成示例
   - ✅ 独立使用
 
 #### 配置与自定义
@@ -31,57 +35,44 @@
 - ✅ 速率限制响应头
 
 #### 测试与质量
-- ✅ 单元测试（28 个测试通过）
-- ✅ 集成测试就绪
+- ✅ 单元测试与集成测试（当前本地全量基线为 62 passing）
 - ✅ ESLint 配置
 - ✅ 代码覆盖率设置
 - ✅ CI/CD 工作流
+- ✅ Memory / Redis / HTTP benchmark 脚本
 
 #### 文档
-- ✅ 全面的 README
-- ✅ API 文档
+- ✅ 英文主 README
+- ✅ 英文默认文档站与简体中文 `/zh/` 文档
+- ✅ API 文档（中英文）
 - ✅ TypeScript 类型定义
 - ✅ 使用示例
   - ✅ Express 示例
   - ✅ Koa 示例
+  - ✅ Egg.js 示例
+  - ✅ Hapi 示例
+  - ✅ Fastify 示例
   - ✅ 独立示例
 - ✅ 贡献指南
 - ✅ 安全策略
 - ✅ 更新日志
 
-### 路线图
+### 当前维护重点
 
-#### 版本 1.1.0（计划中）
-- [ ] 自定义存储适配器：
-  - [ ] MongoDB
-  - [ ] PostgreSQL
-  - [ ] Memcached
-- [ ] 速率限制指标和统计
-- [ ] Prometheus 指标集成
-- [ ] 管理 API 用于管理速率限制
-
-#### 版本 1.2.0（计划中）
-- [ ] 带共识的分布式速率限制
-- [ ] 速率限制策略（突发、持续）
-- [ ] WebSocket 支持
-- [ ] GraphQL 集成
-- [ ] 更多框架适配器（Fastify、Hapi）
-
-#### 未来考虑
-- [ ] 速率限制分析仪表板
-- [ ] 基于机器学习的速率限制
-- [ ] 基于地理位置的速率限制
-- [ ] 基于用户等级的自动速率限制
+- 保持 middleware rollback、Redis / CacheHubStore 状态语义和内存释放回归稳定。
+- 保持 `docs/en/**` 与 `docs/zh/**` 用户可见文档同批同步。
+- 发布前继续执行 `lint`、`typecheck`、`test`、`docs:build`、`npm audit --omit=dev` 与 `npm pack --dry-run`。
 
 ### 已知问题
-- 目前无
+
+- 完整 dev audit 仍有测试工具链残留：`mocha -> serialize-javascript`。生产依赖审计 `npm audit --omit=dev` 为 0 漏洞。
 
 ### 性能基准测试
-- 将在 v1.1.0 中添加
+- 已提供 `benchmark:memory`、`benchmark:redis` 与 `benchmark:http`，性能说明见英文和中文 benchmark 文档。
 
 ### 依赖项状态
-- 所有依赖项都是最新的
-- 安全审计：✅ 无漏洞
+- 生产依赖安全审计：✅ `npm audit --omit=dev` 无漏洞
+- dev 工具链 audit 残留作为独立待处理项跟踪
 
 ### 维护说明
 - 初始发布：2026-02-04
@@ -90,5 +81,5 @@
 
 ---
 
-最后更新：2026-02-04
+最后更新：2026-06-11
 

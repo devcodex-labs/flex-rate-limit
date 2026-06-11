@@ -1,6 +1,6 @@
 {
   "name": "flex-rate-limit",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "Universal rate limiting module for Node.js - supports any framework, multiple storage backends, flexible algorithms",
   "main": "lib/index.js",
   "types": "index.d.ts",
@@ -62,6 +62,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.test.json",
     "lint": "eslint lib/**/*.js test/**/*.js",
     "lint:fix": "eslint lib/**/*.js test/**/*.js --fix",
+    "docs:validate": "node scripts/validate-docs.js",
     "docs:dev": "npm --prefix website run dev",
     "docs:build": "npm --prefix website run build",
     "docs:preview": "npm --prefix website run preview",
@@ -91,7 +92,7 @@
     "typescript": "5.9.3"
   },
   "optionalDependencies": {
-    "cache-hub": "2.1.0",
+    "cache-hub": "2.2.4",
     "ioredis": "5.9.2"
   },
   "overrides": {
