@@ -12,3 +12,4 @@
 - Aligned the documentation homepage hero artwork with the copy block on desktop viewports.
 - Balanced the documentation homepage hero artwork vertically and reduced the empty gap before feature cards on desktop viewports.
 - Fixed the mobile homepage hero order and added a richer documentation footer with VextJS ecosystem and GitHub organization links.
+- Centered the mobile homepage hero copy and action group so the narrow viewport layout aligns visually.
