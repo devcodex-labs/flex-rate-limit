@@ -265,7 +265,8 @@ body::after {
 .rp-home-hero .rp-home-hero__image {
   position: absolute;
   right: -16px;
-  bottom: 34px;
+  top: 174px;
+  bottom: auto;
   z-index: 1;
   width: min(44vw, 520px);
   max-width: 520px;
@@ -381,6 +382,7 @@ body::after {
   .rp-home-hero .rp-home-hero__image {
     position: relative;
     right: auto;
+    top: auto;
     bottom: auto;
     width: min(100%, 520px);
     margin: 30px auto 0;
