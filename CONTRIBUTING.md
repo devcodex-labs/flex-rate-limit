@@ -6,7 +6,7 @@
 
 1. **Fork 仓库**
    ```bash
-   git clone https://github.com/vextjs/flex-rate-limit.git
+   git clone https://github.com/devcodex-labs/flex-rate-limit.git
    cd flex-rate-limit
    ```
 

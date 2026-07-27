@@ -41,17 +41,17 @@ const footerContent = {
       {
         title: "Ecosystem",
         links: [
-          { text: "VextJS", href: "https://vextjs.github.io/vext/", external: true },
-          { text: "schema-dsl", href: "https://vextjs.github.io/schema-dsl/", external: true },
-          { text: "monSQLize", href: "https://vextjs.github.io/monSQLize/", external: true },
+          { text: "VextJS", href: "https://devcodex-labs.github.io/vextjs/", external: true },
+          { text: "schema-dsl", href: "https://devcodex-labs.github.io/schema-dsl/", external: true },
+          { text: "monSQLize", href: "https://devcodex-labs.github.io/monSQLize/", external: true },
         ],
       },
       {
         title: "Project",
         links: [
-          { text: "Repository", href: "https://github.com/vextjs/flex-rate-limit", external: true },
-          { text: "GitHub Organization", href: "https://github.com/vextjs", external: true },
-          { text: "Changelog", href: "https://github.com/vextjs/flex-rate-limit/blob/main/CHANGELOG.md", external: true },
+          { text: "Repository", href: "https://github.com/devcodex-labs/flex-rate-limit", external: true },
+          { text: "GitHub Organization", href: "https://github.com/devcodex-labs", external: true },
+          { text: "Changelog", href: "https://github.com/devcodex-labs/flex-rate-limit/blob/main/CHANGELOG.md", external: true },
         ],
       },
     ],
@@ -78,17 +78,17 @@ const footerContent = {
       {
         title: "生态",
         links: [
-          { text: "VextJS", href: "https://vextjs.github.io/vext/", external: true },
-          { text: "schema-dsl", href: "https://vextjs.github.io/schema-dsl/", external: true },
-          { text: "monSQLize", href: "https://vextjs.github.io/monSQLize/", external: true },
+          { text: "VextJS", href: "https://devcodex-labs.github.io/vextjs/", external: true },
+          { text: "schema-dsl", href: "https://devcodex-labs.github.io/schema-dsl/", external: true },
+          { text: "monSQLize", href: "https://devcodex-labs.github.io/monSQLize/", external: true },
         ],
       },
       {
         title: "项目",
         links: [
-          { text: "代码仓库", href: "https://github.com/vextjs/flex-rate-limit", external: true },
-          { text: "GitHub 组织", href: "https://github.com/vextjs", external: true },
-          { text: "更新日志", href: "https://github.com/vextjs/flex-rate-limit/blob/main/CHANGELOG.md", external: true },
+          { text: "代码仓库", href: "https://github.com/devcodex-labs/flex-rate-limit", external: true },
+          { text: "GitHub 组织", href: "https://github.com/devcodex-labs", external: true },
+          { text: "更新日志", href: "https://github.com/devcodex-labs/flex-rate-limit/blob/main/CHANGELOG.md", external: true },
         ],
       },
     ],

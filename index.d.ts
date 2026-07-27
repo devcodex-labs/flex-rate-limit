@@ -1,5 +1,5 @@
 // Type definitions for flex-rate-limit v2.2.4
-// Project: https://github.com/vextjs/flex-rate-limit
+// Project: https://github.com/devcodex-labs/flex-rate-limit
 // Definitions by: vext.js Team
 
 // ========== 核心类型 ==========

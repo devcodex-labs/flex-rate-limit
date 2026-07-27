@@ -23,11 +23,11 @@
 
 | 框架 | 快速开始文件 | 说明 |
 |------|------------|------|
-| **Express** | [quickstart-express.js](https://github.com/vextjs/flex-rate-limit/blob/main/examples/quickstart-express.js) | 完整的Express路由级限流示例 |
-| **Koa** | [quickstart-koa.js](https://github.com/vextjs/flex-rate-limit/blob/main/examples/quickstart-koa.js) | 完整的Koa路由级限流示例 |
-| **Egg.js** | [quickstart-egg.js](https://github.com/vextjs/flex-rate-limit/blob/main/examples/quickstart-egg.js) | 完整的Egg.js路由级限流示例 |
-| **Hapi** | [quickstart-hapi.js](https://github.com/vextjs/flex-rate-limit/blob/main/examples/quickstart-hapi.js) | 完整的Hapi路由级限流示例 |
-| **独立使用** | [standalone-example.js](https://github.com/vextjs/flex-rate-limit/blob/main/examples/standalone-example.js) | 无框架情况下的使用 |
+| **Express** | [quickstart-express.js](https://github.com/devcodex-labs/flex-rate-limit/blob/main/examples/quickstart-express.js) | 完整的Express路由级限流示例 |
+| **Koa** | [quickstart-koa.js](https://github.com/devcodex-labs/flex-rate-limit/blob/main/examples/quickstart-koa.js) | 完整的Koa路由级限流示例 |
+| **Egg.js** | [quickstart-egg.js](https://github.com/devcodex-labs/flex-rate-limit/blob/main/examples/quickstart-egg.js) | 完整的Egg.js路由级限流示例 |
+| **Hapi** | [quickstart-hapi.js](https://github.com/devcodex-labs/flex-rate-limit/blob/main/examples/quickstart-hapi.js) | 完整的Hapi路由级限流示例 |
+| **独立使用** | [standalone-example.js](https://github.com/devcodex-labs/flex-rate-limit/blob/main/examples/standalone-example.js) | 无框架情况下的使用 |
 
 ## ⚡ 快速示例
 

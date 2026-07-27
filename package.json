@@ -1,6 +1,6 @@
 {
   "name": "flex-rate-limit",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "description": "Universal rate limiting module for Node.js - supports any framework, multiple storage backends, flexible algorithms",
   "main": "lib/index.js",
   "types": "index.d.ts",
@@ -44,12 +44,12 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vextjs/flex-rate-limit.git"
+    "url": "git+https://github.com/devcodex-labs/flex-rate-limit.git"
   },
   "bugs": {
-    "url": "https://github.com/vextjs/flex-rate-limit/issues"
+    "url": "https://github.com/devcodex-labs/flex-rate-limit/issues"
   },
-  "homepage": "https://vextjs.github.io/flex-rate-limit",
+  "homepage": "https://devcodex-labs.github.io/flex-rate-limit/",
   "engines": {
     "node": ">=18.0.0"
   },

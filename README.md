@@ -6,7 +6,7 @@
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Node.js Version](https://img.shields.io/node/v/flex-rate-limit.svg)](https://nodejs.org)
 
-[Documentation](https://vextjs.github.io/flex-rate-limit/) · [中文文档](https://vextjs.github.io/flex-rate-limit/zh/) · [Examples](https://github.com/vextjs/flex-rate-limit/tree/main/examples)
+[Documentation](https://devcodex-labs.github.io/flex-rate-limit/) · [中文文档](https://devcodex-labs.github.io/flex-rate-limit/zh/) · [Examples](https://github.com/devcodex-labs/flex-rate-limit/tree/main/examples)
 
 ## Why Use It
 
@@ -114,7 +114,7 @@ async function guard(ctx, next) {
 }
 ```
 
-See the runnable framework examples on [GitHub](https://github.com/vextjs/flex-rate-limit/tree/main/examples) and the [quickstart guide](https://vextjs.github.io/flex-rate-limit/getting-started/quickstart).
+See the runnable framework examples on [GitHub](https://github.com/devcodex-labs/flex-rate-limit/tree/main/examples) and the [quickstart guide](https://devcodex-labs.github.io/flex-rate-limit/getting-started/quickstart).
 
 ## Storage Backends
 
@@ -167,7 +167,7 @@ const limiter = new RateLimiter({
 });
 ```
 
-Read more in the [storage guide](https://vextjs.github.io/flex-rate-limit/guides/storage).
+Read more in the [storage guide](https://devcodex-labs.github.io/flex-rate-limit/guides/storage).
 
 ## Algorithms
 
@@ -178,7 +178,7 @@ Read more in the [storage guide](https://vextjs.github.io/flex-rate-limit/guides
 | `token-bucket` | Controlled bursts | Allows bursts up to capacity and refills over time |
 | `leaky-bucket` | Smoothing traffic | Drains at a steady rate |
 
-Choose semantics first, then optimize storage and hot paths. See [algorithm comparison](https://vextjs.github.io/flex-rate-limit/algorithms/comparison) and [deep analysis](https://vextjs.github.io/flex-rate-limit/algorithms/deep-analysis).
+Choose semantics first, then optimize storage and hot paths. See [algorithm comparison](https://devcodex-labs.github.io/flex-rate-limit/algorithms/comparison) and [deep analysis](https://devcodex-labs.github.io/flex-rate-limit/algorithms/deep-analysis).
 
 ## Common Configuration
 
@@ -214,7 +214,7 @@ const limiter = new RateLimiter({
 | `skipSuccessfulRequests` | `false` | Roll back successful responses |
 | `skipFailedRequests` | `false` | Roll back failed responses |
 
-Full details are in the [configuration guide](https://vextjs.github.io/flex-rate-limit/guides/config) and [API reference](https://vextjs.github.io/flex-rate-limit/reference/api-reference).
+Full details are in the [configuration guide](https://devcodex-labs.github.io/flex-rate-limit/guides/config) and [API reference](https://devcodex-labs.github.io/flex-rate-limit/reference/api-reference).
 
 ## Result Shape
 
@@ -244,21 +244,21 @@ npm run benchmark:http
 
 The npm runtime package does not require benchmark dependencies. Redis and HTTP benchmark output records the Node.js version, Redis URL, key distribution, concurrency, and other parameters. Use `BENCH_JSON=1` when you need machine-readable output.
 
-See [Benchmark and Performance](https://vextjs.github.io/flex-rate-limit/benchmark) for commands, environment variables, and interpretation notes.
+See [Benchmark and Performance](https://devcodex-labs.github.io/flex-rate-limit/benchmark) for commands, environment variables, and interpretation notes.
 
 ## Documentation
 
 | Entry | Description |
 |-------|-------------|
-| [Documentation index](https://vextjs.github.io/flex-rate-limit/) | English documentation navigation |
-| [Chinese documentation](https://vextjs.github.io/flex-rate-limit/zh/) | Simplified Chinese documentation navigation |
-| [Quickstart](https://vextjs.github.io/flex-rate-limit/getting-started/quickstart) | First integration path and framework examples |
-| [Configuration](https://vextjs.github.io/flex-rate-limit/guides/config) | Complete option reference and practical presets |
-| [Storage](https://vextjs.github.io/flex-rate-limit/guides/storage) | Memory, Redis, and CacheHubStore selection |
-| [Business lock guide](https://vextjs.github.io/flex-rate-limit/guides/business-lock-guide) | User + route scoped rate limiting |
-| [Algorithm comparison](https://vextjs.github.io/flex-rate-limit/algorithms/comparison) | Choosing the right algorithm |
-| [API reference](https://vextjs.github.io/flex-rate-limit/reference/api-reference) | Classes, options, stores, and exports |
-| [Benchmark guide](https://vextjs.github.io/flex-rate-limit/benchmark) | Local benchmark commands and caveats |
+| [Documentation index](https://devcodex-labs.github.io/flex-rate-limit/) | English documentation navigation |
+| [Chinese documentation](https://devcodex-labs.github.io/flex-rate-limit/zh/) | Simplified Chinese documentation navigation |
+| [Quickstart](https://devcodex-labs.github.io/flex-rate-limit/getting-started/quickstart) | First integration path and framework examples |
+| [Configuration](https://devcodex-labs.github.io/flex-rate-limit/guides/config) | Complete option reference and practical presets |
+| [Storage](https://devcodex-labs.github.io/flex-rate-limit/guides/storage) | Memory, Redis, and CacheHubStore selection |
+| [Business lock guide](https://devcodex-labs.github.io/flex-rate-limit/guides/business-lock-guide) | User + route scoped rate limiting |
+| [Algorithm comparison](https://devcodex-labs.github.io/flex-rate-limit/algorithms/comparison) | Choosing the right algorithm |
+| [API reference](https://devcodex-labs.github.io/flex-rate-limit/reference/api-reference) | Classes, options, stores, and exports |
+| [Benchmark guide](https://devcodex-labs.github.io/flex-rate-limit/benchmark) | Local benchmark commands and caveats |
 
 The website is built with Rspress and reuses the `docs/` directory:
 
@@ -270,7 +270,7 @@ npm run docs:build
 
 ## Examples
 
-Runnable examples are available on [GitHub](https://github.com/vextjs/flex-rate-limit/tree/main/examples):
+Runnable examples are available on [GitHub](https://github.com/devcodex-labs/flex-rate-limit/tree/main/examples):
 
 | Category | Files |
 |----------|-------|
@@ -302,14 +302,14 @@ npm run coverage
 
 ## Related Projects
 
-- [monSQLize](https://github.com/vextjs/monSQLize) - MongoDB ORM with caching
-- [schema-dsl](https://vextjs.github.io/schema-dsl/) ([GitHub](https://github.com/vextjs/schema-dsl)) - JSON Schema validation
-- [jrpc](https://github.com/vextjs/jrpc) - JSON-RPC 2.0 implementation
+- [monSQLize](https://github.com/devcodex-labs/monSQLize) - MongoDB ORM with caching
+- [schema-dsl](https://devcodex-labs.github.io/schema-dsl/) ([GitHub](https://github.com/devcodex-labs/schema-dsl)) - JSON Schema validation
+- [jrpc](https://github.com/devcodex-labs/jrpc) - JSON-RPC 2.0 implementation
 
 ## Support
 
-- [GitHub Issues](https://github.com/vextjs/flex-rate-limit/issues)
-- [GitHub Discussions](https://github.com/vextjs/flex-rate-limit/discussions)
+- [GitHub Issues](https://github.com/devcodex-labs/flex-rate-limit/issues)
+- [GitHub Discussions](https://github.com/devcodex-labs/flex-rate-limit/discussions)
 
 ## License
 

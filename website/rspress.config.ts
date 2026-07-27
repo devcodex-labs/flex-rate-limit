@@ -3,7 +3,7 @@ import { defineConfig } from "@rspress/core";
 import { pluginSitemap } from "@rspress/plugin-sitemap";
 
 const DEFAULT_DOCS_BASE = "/flex-rate-limit/";
-const DEFAULT_DOCS_SITE_URL = "https://vextjs.github.io/flex-rate-limit";
+const DEFAULT_DOCS_SITE_URL = "https://devcodex-labs.github.io/flex-rate-limit";
 
 function normalizeDocsBase(value?: string) {
   const raw = value?.trim() || DEFAULT_DOCS_BASE;
@@ -89,7 +89,7 @@ const navSource: LocalizedNavItem[] = [
       {
         en: "Changelog",
         zh: "更新日志",
-        link: "https://github.com/vextjs/flex-rate-limit/blob/main/CHANGELOG.md",
+        link: "https://github.com/devcodex-labs/flex-rate-limit/blob/main/CHANGELOG.md",
       },
       {
         en: "npm",
@@ -99,7 +99,7 @@ const navSource: LocalizedNavItem[] = [
       {
         en: "GitHub Organization",
         zh: "GitHub 组织",
-        link: "https://github.com/vextjs",
+        link: "https://github.com/devcodex-labs",
       },
     ],
   },
@@ -278,7 +278,7 @@ export default defineConfig({
       {
         icon: "github",
         mode: "link",
-        content: "https://github.com/vextjs/flex-rate-limit",
+        content: "https://github.com/devcodex-labs/flex-rate-limit",
       },
     ],
     lastUpdated: true,

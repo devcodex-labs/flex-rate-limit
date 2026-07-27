@@ -3,8 +3,8 @@
 > **项目**: flex-rate-limit
 > **版本**: 2.2.4
 > **运行时**: Node.js >= 18.0.0
-> **仓库**: https://github.com/vextjs/flex-rate-limit
-> **Website**: https://vextjs.github.io/flex-rate-limit
+> **仓库**: https://github.com/devcodex-labs/flex-rate-limit
+> **Website**: https://devcodex-labs.github.io/flex-rate-limit
 > **更新**: 2026-06-11
 
 ---
@@ -383,18 +383,18 @@ A: 按用户+路由限流，每个用户在每个接口独立限额，详见 [gu
 
 ### 获取支持
 
-- 💬 [GitHub Issues](https://github.com/vextjs/flex-rate-limit/issues)
-- 💡 [GitHub Discussions](https://github.com/vextjs/flex-rate-limit/discussions)
-- 📖 [示例代码](https://github.com/vextjs/flex-rate-limit/tree/main/examples)
+- 💬 [GitHub Issues](https://github.com/devcodex-labs/flex-rate-limit/issues)
+- 💡 [GitHub Discussions](https://github.com/devcodex-labs/flex-rate-limit/discussions)
+- 📖 [示例代码](https://github.com/devcodex-labs/flex-rate-limit/tree/main/examples)
 
 ---
 
 ## 🎉 快速链接
 
-- 📖 [项目首页](https://github.com/vextjs/flex-rate-limit#readme)
-- 💻 [示例代码](https://github.com/vextjs/flex-rate-limit/tree/main/examples)
+- 📖 [项目首页](https://github.com/devcodex-labs/flex-rate-limit#readme)
+- 💻 [示例代码](https://github.com/devcodex-labs/flex-rate-limit/tree/main/examples)
 - 📦 [npm 包](https://www.npmjs.com/package/flex-rate-limit)
-- 🐛 [报告问题](https://github.com/vextjs/flex-rate-limit/issues)
+- 🐛 [报告问题](https://github.com/devcodex-labs/flex-rate-limit/issues)
 
 ---
 
